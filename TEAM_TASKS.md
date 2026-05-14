@@ -6,11 +6,11 @@
 ---
 ---
 
-# 👤 MEMBER 1 — SOHAIL (Backend Lead)
+# 👤 MEMBER 1 — 
 
 > You handle the Python backend and AI agents. Everything that "thinks" is your job.
 
-## Today (May 14) — Do these IN ORDER:
+## Today (May 14) — Ayesha Do these IN ORDER:
 
 ### Step 1: Push to GitHub (15 min)
 1. Go to https://github.com/new
@@ -47,7 +47,7 @@ git push -u origin main
 ---
 ---
 
-# 👤 MEMBER 2 — FLUTTER DEVELOPER
+# 👤 MEMBER 2 — shaheer FLUTTER DEVELOPER
 
 > You build the mobile app. You make the thing people SEE and TOUCH.
 
@@ -139,7 +139,7 @@ flutter pub get
 ---
 ---
 
-# 👤 MEMBER 3 — DATA & DATABASE ENGINEER
+# 👤 MEMBER 3 — abdullah DATA & DATABASE ENGINEER
 
 > You set up the database and make sure data flows in correctly.
 
@@ -240,7 +240,7 @@ Run it with: `python seed_data.py`
 ---
 ---
 
-# 👤 MEMBER 4 — SIMULATION & STRESS-TEST ENGINEER
+# 👤 MEMBER 4 — alina SIMULATION & STRESS-TEST ENGINEER
 
 > You make sure our system works under pressure. You try to break it.
 
