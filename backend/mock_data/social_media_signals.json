@@ -1,0 +1,63 @@
+[
+  {
+    "id": "sm-001",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "Massive flooding in G-10 Islamabad! Water is waist-deep near the main market. People stranded! #IslamabadFloods",
+    "user": "citizen_reporter_1",
+    "location": {"lat": 33.6881, "lng": 73.0336, "area": "G-10"},
+    "timestamp": "2026-05-14T14:30:00Z",
+    "likes": 245,
+    "retweets": 89,
+    "urgency_keywords": ["massive", "stranded", "waist-deep"]
+  },
+  {
+    "id": "sm-002",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "Water rising fast in G-10/2, cars stuck on the road. Someone please send help!",
+    "user": "citizen_reporter_2",
+    "location": {"lat": 33.6875, "lng": 73.0340, "area": "G-10/2"},
+    "timestamp": "2026-05-14T14:35:00Z",
+    "likes": 120,
+    "retweets": 45,
+    "urgency_keywords": ["rising fast", "stuck", "help"]
+  },
+  {
+    "id": "sm-003",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "I think it's just a water main burst in G-10, not actual flooding. Saw utility workers near the pipe.",
+    "user": "local_observer",
+    "location": {"lat": 33.6878, "lng": 73.0332, "area": "G-10"},
+    "timestamp": "2026-05-14T14:40:00Z",
+    "likes": 30,
+    "retweets": 12,
+    "urgency_keywords": [],
+    "is_contradictory": true
+  },
+  {
+    "id": "sm-004",
+    "source": "social_media",
+    "platform": "facebook",
+    "text": "Extremely hot day in G-7. My elderly neighbor fainted. No electricity for 4 hours. This is dangerous!",
+    "user": "g7_resident",
+    "location": {"lat": 33.6990, "lng": 73.0480, "area": "G-7"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "likes": 180,
+    "retweets": 0,
+    "urgency_keywords": ["fainted", "dangerous", "no electricity"]
+  },
+  {
+    "id": "sm-005",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "Multiple people reporting heat stroke symptoms in G-7/1 low-income area. Need medical attention ASAP.",
+    "user": "health_volunteer",
+    "location": {"lat": 33.6985, "lng": 73.0475, "area": "G-7/1"},
+    "timestamp": "2026-05-14T14:45:00Z",
+    "likes": 95,
+    "retweets": 67,
+    "urgency_keywords": ["heat stroke", "medical attention", "ASAP"]
+  }
+]

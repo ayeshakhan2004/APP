@@ -1,0 +1,34 @@
+[
+  {
+    "id": "wx-001",
+    "source": "weather",
+    "provider": "openweathermap",
+    "location": {"lat": 33.6844, "lng": 73.0479, "city": "Islamabad"},
+    "timestamp": "2026-05-14T14:00:00Z",
+    "temperature_c": 44.2,
+    "feels_like_c": 48.5,
+    "humidity_pct": 25,
+    "rainfall_mm_1h": 85.3,
+    "rainfall_mm_24h": 142.0,
+    "wind_speed_kmh": 35,
+    "alert_type": "extreme_rain",
+    "alert_severity": "severe",
+    "forecast_next_3h": "continued heavy rainfall expected"
+  },
+  {
+    "id": "wx-002",
+    "source": "weather",
+    "provider": "openweathermap",
+    "location": {"lat": 33.6990, "lng": 73.0480, "area": "G-7"},
+    "timestamp": "2026-05-14T14:00:00Z",
+    "temperature_c": 46.1,
+    "feels_like_c": 51.3,
+    "humidity_pct": 18,
+    "rainfall_mm_1h": 0,
+    "rainfall_mm_24h": 0,
+    "wind_speed_kmh": 8,
+    "alert_type": "extreme_heat",
+    "alert_severity": "critical",
+    "forecast_next_3h": "temperature expected to peak at 47C"
+  }
+]

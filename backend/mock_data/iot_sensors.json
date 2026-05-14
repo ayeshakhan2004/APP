@@ -1,0 +1,51 @@
+[
+  {
+    "id": "iot-001",
+    "source": "iot_sensor",
+    "sensor_type": "water_level",
+    "location": {"lat": 33.6880, "lng": 73.0335, "area": "G-10 Nullah"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "reading": 2.8,
+    "unit": "meters",
+    "threshold": 2.0,
+    "status": "above_threshold",
+    "battery_pct": 72
+  },
+  {
+    "id": "iot-002",
+    "source": "iot_sensor",
+    "sensor_type": "water_level",
+    "location": {"lat": 33.6870, "lng": 73.0340, "area": "G-10/2 Drain"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "reading": 1.5,
+    "unit": "meters",
+    "threshold": 2.0,
+    "status": "normal",
+    "battery_pct": 85
+  },
+  {
+    "id": "iot-003",
+    "source": "iot_sensor",
+    "sensor_type": "temperature",
+    "location": {"lat": 33.6990, "lng": 73.0480, "area": "G-7 Weather Station"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "reading": 46.1,
+    "unit": "celsius",
+    "threshold": 42.0,
+    "status": "above_threshold",
+    "battery_pct": 90
+  },
+  {
+    "id": "iot-004",
+    "source": "iot_sensor",
+    "sensor_type": "water_pressure",
+    "location": {"lat": 33.6879, "lng": 73.0333, "area": "G-10 Water Main"},
+    "timestamp": "2026-05-14T14:30:00Z",
+    "reading": 12,
+    "unit": "psi",
+    "threshold": 40,
+    "status": "critically_low",
+    "battery_pct": 65,
+    "note": "Sudden pressure drop suggests pipe burst"
+  }
+]

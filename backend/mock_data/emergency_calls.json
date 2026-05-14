@@ -1,0 +1,46 @@
+[
+  {
+    "id": "ec-001",
+    "source": "emergency_calls",
+    "call_type": "flood_rescue",
+    "caller_area": "G-10/2",
+    "location": {"lat": 33.6875, "lng": 73.0340},
+    "timestamp": "2026-05-14T14:28:00Z",
+    "transcript_summary": "Family trapped on second floor, water entering ground floor",
+    "priority": "critical",
+    "dispatched": false
+  },
+  {
+    "id": "ec-002",
+    "source": "emergency_calls",
+    "call_type": "flood_rescue",
+    "caller_area": "G-10/1",
+    "location": {"lat": 33.6883, "lng": 73.0330},
+    "timestamp": "2026-05-14T14:32:00Z",
+    "transcript_summary": "Elderly couple needs evacuation, ground floor submerged",
+    "priority": "critical",
+    "dispatched": false
+  },
+  {
+    "id": "ec-003",
+    "source": "emergency_calls",
+    "call_type": "medical_emergency",
+    "caller_area": "G-7/1",
+    "location": {"lat": 33.6988, "lng": 73.0472},
+    "timestamp": "2026-05-14T14:38:00Z",
+    "transcript_summary": "3 elderly people with heat stroke symptoms, need ambulance",
+    "priority": "high",
+    "dispatched": false
+  },
+  {
+    "id": "ec-004",
+    "source": "emergency_calls",
+    "call_type": "infrastructure",
+    "caller_area": "G-10",
+    "location": {"lat": 33.6879, "lng": 73.0333},
+    "timestamp": "2026-05-14T14:42:00Z",
+    "transcript_summary": "Water main appears to be broken, large pipe burst on street",
+    "priority": "high",
+    "dispatched": false
+  }
+]
