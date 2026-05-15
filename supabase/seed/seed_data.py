@@ -1,59 +1,95 @@
 import json
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 from supabase import create_client
 
-# --- CONFIGURATION ---
-URL = "https://yelrdyaexzgruanlbjgr.supabase.co"
-KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllbHJkeWFleHpncnVhbmxiamdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NDM3ODYsImV4cCI6MjA5NDMxOTc4Nn0.bIxB5DtBKdzMQ2Wf2wx-yb1lq5H6ENAEka8Z08XblKc"
+# 1. DYNAMIC PATHING: Find the Project Root
+# This script assumes it is inside CIRO/supabase/seed/
+# We go up 2 levels to get to the 'CIRO' folder
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parents[1]  # Goes up two levels (seed -> supabase -> CIRO)
 
-supabase = create_client(URL, KEY)
+ENV_PATH = PROJECT_ROOT / "backend" / ".env"
 
-# Aapki exact directory ka rasta
-BASE_PATH = r"F:\Projects\Hackathon\AISEEKHO-CIRO\backend\mock_data"
+# Load .env from the PROJECT ROOT
+load_dotenv(ENV_PATH)
+url = os.getenv("SUPABASE_URL")
 
-def seed_signals():
-    filenames = ['social_media_signals', 'weather_signals', 'traffic_signals', 'emergency_calls', 'iot_sensors']
+# Using the key name you mentioned earlier
+key = os.getenv("SUPABASE_SERVICE_KEY") or os.getenv("SUPABASE_KEY")
+
+if not url or not key:
+    print(f"❌ Error: Credentials missing! URL: {url}, KEY: {'Provided' if key else 'Missing'}")
+    exit()
+
+supabase = create_client(url, key)
+
+def seed_data():
+    # 2. DYNAMIC FOLDER TARGETING
+    # This points exactly to C:/.../CIRO/backend/mock_data/
+    mock_data_dir = PROJECT_ROOT / "backend" / "mock_data"
+
+    if not mock_data_dir.exists():
+        print(f"❌ Error: Mock data folder not found at {mock_data_dir}")
+        return
+
+    # Files to process for the 'signals' table
+    signal_files = [
+        'social_media_signals', 
+        'weather_signals', 
+        'traffic_signals', 
+        'emergency_calls', 
+        'iot_sensors'
+    ]
     
-    for name in filenames:
-        # Full path banaya ja raha hai
-        path = os.path.join(BASE_PATH, f"{name}.json")
+    print(f"🚀 Seeding from: {mock_data_dir}")
+
+    for filename in signal_files:
+        full_path = mock_data_dir / f"{filename}.json"
         
-        if os.path.exists(path):
-            with open(path, 'r') as f:
-                data = json.load(f)
-                print(f"Uploading {len(data)} items from {name}...")
-                for item in data:
-                    supabase.table('signals').insert({
-                        'source': item.get('source', name),
-                        'raw_data': item,
-                        'location': str(item.get('location', '')),
-                        'credibility_score': 0.5
-                    }).execute()
-            print(f"✅ {name} uploaded!")
-        else:
-            print(f"❌ File nahi mili: {path}")
+        if not full_path.exists():
+            print(f"⚠️ Warning: File missing at {full_path}")
+            continue
 
-def seed_resources():
-    path = os.path.join(BASE_PATH, "resources_inventory.json")
-    
-    if os.path.exists(path):
-        with open(path, 'r') as f:
-            resources = json.load(f)
-            print(f"Uploading {len(resources)} resources...")
-            for r in resources:
-                supabase.table('resources').insert({
-                    'type': r.get('type', 'unknown'),
-                    'status': r.get('status', 'available'),
-                    'current_lat': r.get('lat', 0.0),
-                    'current_lng': r.get('lng', 0.0),
-                    'base_name': r.get('base', 'Main Base'),
-                }).execute()
-        print("✅ Resources inventory uploaded!")
-    else:
-        print(f"❌ File nahi mili: {path}")
+        try:
+            with open(full_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            # Map JSON data to Database columns
+            to_insert = [{
+                'source': item.get('source', filename),
+                'raw_data': item,
+                'location': item.get('location', 'Unknown'),
+                'credibility_score': 0.5,
+            } for item in data]
+            
+            if to_insert:
+                supabase.table('signals').insert(to_insert).execute()
+                print(f"✅ Batch-inserted {len(to_insert)} items from {filename}")
+
+        except Exception as e:
+            print(f"❌ Error processing {filename}: {e}")
+
+    # 3. Dynamic Resources Seeding
+    res_path = mock_data_dir / "resources_inventory.json"
+    if res_path.exists():
+        try:
+            with open(res_path, 'r', encoding='utf-8') as f:
+                resources = json.load(f)
+            
+            res_to_insert = [{
+                'type': r.get('type'),
+                'status': r.get('status'),
+                'current_lat': r.get('lat'),
+                'current_lng': r.get('lng'),
+                'base_name': r.get('base'),
+            } for r in resources]
+            
+            supabase.table('resources').insert(res_to_insert).execute()
+            print(f"✅ Successfully seeded {len(res_to_insert)} resources.")
+        except Exception as e:
+            print(f"❌ Failed to seed resources: {e}")
 
 if __name__ == "__main__":
-    print("--- CIRO Database Seeding Started ---")
-    seed_signals()
-    seed_resources()
-    print("--- All Done! Check your Supabase Dashboard ---")
+    seed_data()
