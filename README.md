@@ -336,7 +336,7 @@ npx supabase functions deploy
 
 - No real personal data used — all datasets are synthetic/mock
 - Social media posts are fictional and do not reference real individuals
-- Location data uses real Islamabad sector names for realism but fictional events
+- Location data uses real Karachi sector names for realism but fictional events
 - All API keys stored in environment variables, never committed
 - Alert messages include "THIS IS A SIMULATION" watermark in demo
 
@@ -348,7 +348,7 @@ npx supabase functions deploy
 2. Resource allocation is modeled, not connected to real dispatch systems
 3. Map visualization uses static crisis zones, not real-time GIS
 4. LLM responses may vary between runs (mitigated by structured output prompts)
-5. Single-city scope (Islamabad) — multi-city would require schema changes
+5. Single-city scope (Karachi) — multi-city would require schema changes
 
 ---
 
