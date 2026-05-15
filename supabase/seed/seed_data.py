@@ -10,7 +10,7 @@ from supabase import create_client
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parents[1]  # Goes up two levels (seed -> supabase -> CIRO)
 
-ENV_PATH = PROJECT_ROOT / "backend" / ".env"
+ENV_PATH = PROJECT_ROOT  / ".env"
 
 # Load .env from the PROJECT ROOT
 load_dotenv(ENV_PATH)

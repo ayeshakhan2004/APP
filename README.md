@@ -72,7 +72,7 @@
 
 | Role | Member # | Responsibilities |
 |------|----------|-----------------|
-| **R1: Backend Lead & Agent Architect** | Member 1 (YOU - Sohail) | FastAPI setup, agent pipeline, Antigravity orchestration, all 7 agents, Vertex AI integration |
+| **R1: Backend Lead & Agent Architect** | Member 1 (YOU ) | FastAPI setup, agent pipeline, Antigravity orchestration, all 7 agents, Vertex AI integration |
 | **R2: Flutter Mobile Developer** | Member 2 | Full Flutter app: dashboard, crisis map, resource view, alert feed, real-time updates, UX/UI |
 | **R3: Data Engineer & Signal Specialist** | Member 3 | Mock datasets for all 5 sources, Supabase schema/migrations, seed data, signal ingestion endpoints |
 | **R4: Simulation & Stress-Test Engineer** | Member 4 | Action simulation logic, stress-test scenarios, robustness/edge cases, false alarm flows, baseline comparison |

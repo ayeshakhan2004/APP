@@ -22,23 +22,29 @@ class CrisisDetailScreen extends StatelessWidget {
             _buildHeader(severityColor),
             const SizedBox(height: 20),
             _buildSectionTitle('Affected Area'),
-            Text(crisis['location']?['area_name'] ?? 'Islamabad', style: const TextStyle(fontSize: 16)),
+            Text(crisis['location']?['area_name'] ?? 'Islamabad',
+                style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 20),
             _buildSectionTitle('Severity & Confidence'),
             Row(
               children: [
-                _buildChip(crisis['severity']?.toUpperCase() ?? 'LOW', severityColor),
+                _buildChip(
+                    crisis['severity']?.toUpperCase() ?? 'LOW', severityColor),
                 const SizedBox(width: 10),
-                _buildChip('CONFIDENCE: ${(crisis['confidence_score'] ?? 0.0 * 100).toInt()}%', Colors.blueGrey),
+                _buildChip(
+                    'CONFIDENCE: ${(((crisis['confidence_score'] as num?) ?? 0.0) * 100).toInt()}%',
+                    Colors.blueGrey),
               ],
             ),
             const SizedBox(height: 20),
             _buildSectionTitle('Predicted Evolution'),
-            const Text('• Peak impact expected in 2 hours\n• Potential spread to neighboring sectors\n• Estimated duration: 6 hours', style: TextStyle(fontSize: 15)),
+            const Text(
+                '• Peak impact expected in 2 hours\n• Potential spread to neighboring sectors\n• Estimated duration: 6 hours',
+                style: TextStyle(fontSize: 15)),
             const SizedBox(height: 20),
             _buildSectionTitle('Assigned Resources'),
             const ListTile(
-              leading: Icon(Icons.ambulance, color: Colors.redAccent),
+              leading: Icon(Icons.medical_services, color: Colors.redAccent),
               title: Text('Ambulance #04 (En Route)'),
               trailing: Text('ETA: 8m'),
             ),
@@ -52,7 +58,8 @@ class CrisisDetailScreen extends StatelessWidget {
               ),
               child: const Text(
                 'Reasoning: Detected contradiction between social media and IoT sensor. Overrode flood alert with pipe burst classification based on 0.92 credibility score of pressure sensor.',
-                style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
               ),
             ),
           ],
@@ -77,7 +84,11 @@ class CrisisDetailScreen extends StatelessWidget {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+      child: Text(title,
+          style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.redAccent)),
     );
   }
 
@@ -91,10 +102,14 @@ class CrisisDetailScreen extends StatelessWidget {
 
   Color _getSeverityColor(String severity) {
     switch (severity.toLowerCase()) {
-      case 'critical': return Colors.red;
-      case 'high': return Colors.orange;
-      case 'moderate': return Colors.yellow;
-      default: return Colors.green;
+      case 'critical':
+        return Colors.red;
+      case 'high':
+        return Colors.orange;
+      case 'moderate':
+        return Colors.yellow;
+      default:
+        return Colors.green;
     }
   }
 }
