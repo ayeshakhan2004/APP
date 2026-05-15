@@ -5,7 +5,7 @@
 
 ---
 
-# 👤 MEMBER 1 — SOHAIL (Backend Lead)
+# 👤 MEMBER 1 — Ayesha (Backend Lead)
 
 > **Goal for Today:** Connect the AI Agents to the Supabase Database. Currently, the agents process mock data and return JSON. Today, they must read from and save to the live database.
 
@@ -40,7 +40,7 @@ Open `backend/agents/orchestrator.py`. Right now, it returns a dictionary. You n
 
 ---
 
-# 👤 MEMBER 2 — FLUTTER DEVELOPER
+# 👤 MEMBER 2 — Shaheer FLUTTER DEVELOPER
 
 > **Goal for Today:** Replace the hardcoded fake data in the mobile app with real data from the Python backend API.
 
@@ -75,7 +75,7 @@ Do the same for `resource_list_screen.dart`. Create a provider that fetches from
 
 ---
 
-# 👤 MEMBER 3 — DATA & DATABASE ENGINEER
+# 👤 MEMBER 3 —Abdullah DATA & DATABASE ENGINEER
 
 > **Goal for Today:** Build Supabase Edge Functions so that external systems (like a weather API or a citizen reporting app) can push data into our system automatically.
 
@@ -106,12 +106,12 @@ Test it using Postman or cURL by sending a fake weather alert to your new Edge F
 
 ---
 
-# 👤 MEMBER 4 — SIMULATION & STRESS-TEST ENGINEER
+# 👤 MEMBER 4 — Alina SIMULATION & STRESS-TEST ENGINEER
 
 > **Goal for Today:** Run the AI tests and document exactly how the system behaves under pressure. This is crucial for the judging criteria.
 
 ### Step 1: Verify the Gemini API Key (10 min)
-Work with Sohail to ensure the `GEMINI_API_KEY` in `.env` is active and has quota. The tests will fail without a working LLM.
+Work with Ayesha to ensure the `GEMINI_API_KEY` in `.env` is active and has quota. The tests will fail without a working LLM.
 
 ### Step 2: Execute the Stress Tests (1 hour)
 Run the file `backend/tests/stress_tests.py`.
@@ -133,14 +133,14 @@ Write a detailed report of the execution. Include:
 
 ---
 
-# 👤 MEMBER 5 — DOCS, VIDEO & TRACES LEAD
+# 👤 MEMBER 5 —Sidra DOCS, VIDEO & TRACES LEAD
 
 > **Goal for Today:** Start producing the final deliverables that the judges will actually look at.
 
 ### Step 1: Cost & Latency Analysis (1 hour)
 Create a file `docs/analysis.md`.
 Write a 1-page report detailing:
-- How much it costs to run 1 crisis through Gemini 2.0 Flash (hint: it's fractions of a cent).
+- How much it costs to run 1 crisis through Gemini 2.5 Flash Lite (hint: it's fractions of a cent).
 - What the latency is (how many seconds from signal ingest to notification).
 - How the system would scale if 500 crises happened at once (horizontal scaling on Cloud Run).
 
