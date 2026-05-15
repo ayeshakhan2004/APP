@@ -5,6 +5,8 @@ import os
 from datetime import datetime
 from typing import Any, Dict, Optional
 from ..models.trace import AgentTrace, TraceType
+# Import the supabase client we set up earlier
+from backend.services.supabase_client import supabase
 
 TRACES_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "docs", "traces")
 
@@ -23,6 +25,17 @@ class TraceLogger:
             reasoning_chain=reasoning,
         )
         self.traces.append(trace)
+        
+        # --- SUPABASE: Insert trace into the database ---
+        try:
+            supabase.table('traces').insert({
+                "action": f"{agent}: {trace_type.value}",
+                "success": True,
+                "created_at": datetime.utcnow().isoformat()
+            }).execute()
+        except Exception as e:
+            print(f"⚠️ Supabase Trace Logging Failed: {e}")
+
         print(f"[TRACE] {agent} | {trace_type.value} | conf={confidence}")
         return trace
 
@@ -51,4 +64,5 @@ class TraceLogger:
 
 
 # Global instance
-trace_logger = TraceLogger()
+trace_logger = TraceLogger()git add -A && git commit -m "supabase backend integration" && git push
+
