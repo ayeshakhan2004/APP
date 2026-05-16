@@ -1,8 +1,8 @@
 """Crisis Detector Agent — classifies crisis type, location, severity, confidence."""
 
 from typing import Any, Dict
-from ..base_agent import BaseAgent
-from ...services.gemini_service import ask_gemini
+from agents.base_agent import BaseAgent
+from services.gemini_service import ask_gemini
 import json
 
 
@@ -55,7 +55,7 @@ Return JSON:
   ]
 }}"""
 
-        system = "You are an expert urban crisis classifier for Islamabad, Pakistan. You must accurately classify crisis types while flagging uncertainties."
+        system = "You are an expert urban crisis classifier for Karachi, Pakistan. You must accurately classify crisis types while flagging uncertainties."
 
         result = await ask_gemini(prompt, system)
 

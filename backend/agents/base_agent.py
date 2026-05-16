@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict
-from ..utils.trace_logger import trace_logger
+from utils.trace_logger import trace_logger
 
 
 class BaseAgent(ABC):

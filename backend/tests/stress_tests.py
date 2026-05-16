@@ -6,7 +6,7 @@ Scenarios defined for Challenge 3: Emergency Response.
 import asyncio
 import json
 import os
-from backend.agents.orchestrator import CIROOrchestrator
+from agents.orchestrator import CIROOrchestrator
 
 # Colors for terminal demo
 BLUE, GREEN, RED, ENDC, BOLD = "\033[94m", "\033[92m", "\033[91m", "\033[0m", "\033[1m"

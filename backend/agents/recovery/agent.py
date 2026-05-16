@@ -1,8 +1,8 @@
 """Recovery Agent — handles false alarms, retractions, corrections."""
 
 from typing import Any, Dict
-from ..base_agent import BaseAgent
-from ...services.gemini_service import ask_gemini
+from agents.base_agent import BaseAgent
+from services.gemini_service import ask_gemini
 import json
 
 

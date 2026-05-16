@@ -1,8 +1,8 @@
 """Resource Allocator Agent — optimizes constrained resources across crises."""
 
 from typing import Any, Dict
-from ..base_agent import BaseAgent
-from ...services.gemini_service import ask_gemini
+from agents.base_agent import BaseAgent
+from services.gemini_service import ask_gemini
 import json
 
 
@@ -14,7 +14,7 @@ class ResourceAllocatorAgent(BaseAgent):
         crises = input_data.get("crises_with_predictions", [])
         resources = input_data.get("available_resources", [])
 
-        prompt = f"""You are a Crisis Resource Allocation Optimizer for Islamabad emergency services.
+        prompt = f"""You are a Crisis Resource Allocation Optimizer for Karachi emergency services.
 
 ACTIVE CRISES (with severity predictions):
 {json.dumps(crises, indent=2, default=str)}

@@ -35,7 +35,7 @@ async def get_resources():
 @router.post("/pipeline/run")
 async def run_full_pipeline():
     """Run the complete CIRO crisis detection pipeline."""
-    from ..agents.orchestrator import CIROOrchestrator
+    from agents.orchestrator import CIROOrchestrator
 
     # Load all signals
     signals = []
@@ -52,7 +52,7 @@ async def run_full_pipeline():
 @router.post("/pipeline/recover")
 async def run_recovery(data: Dict[str, Any]):
     """Run recovery flow for false alarm or reclassification."""
-    from ..agents.orchestrator import CIROOrchestrator
+    from agents.orchestrator import CIROOrchestrator
 
     crisis_id = data.get("crisis_id", "")
     original_crisis = data.get("original_crisis", {})
@@ -72,14 +72,14 @@ async def run_recovery(data: Dict[str, Any]):
 @router.get("/traces")
 async def get_traces():
     """Get all captured traces."""
-    from ..utils.trace_logger import trace_logger
+    from utils.trace_logger import trace_logger
     return {"traces": [t.model_dump(mode="json") for t in trace_logger.traces], "count": len(trace_logger.traces)}
 
 
 @router.post("/traces/export")
 async def export_traces(data: Dict[str, Any] = {"scenario": "default"}):
     """Export traces to JSON file."""
-    from ..utils.trace_logger import trace_logger
+    from utils.trace_logger import trace_logger
     scenario = data.get("scenario", "default")
     path = trace_logger.export_traces(scenario)
     return {"exported_to": path, "trace_count": len(trace_logger.traces)}
