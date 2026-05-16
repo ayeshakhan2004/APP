@@ -121,7 +121,7 @@ if __name__ == "__main__":
     allocations = baseline_allocate_resources(alerts, resources)
     print(f"Resources allocated: {len(allocations)}")
     for a in allocations:
-        print(f"  - {a['resource']} → {a['alert']} | {a['note']}")
+        print(f"  - {a['resource']} -> {a['alert']} | {a['note']}")
     
     print()
     print("=== PROBLEMS WITH BASELINE ===")
