@@ -1,6 +1,6 @@
 -- CIRO Database Schema
 -- Supabase PostgreSQL Migration
-
+import uuid
 -- Enable extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

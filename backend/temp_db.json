@@ -1,0 +1,167 @@
+[
+  {
+    "id": "9a554f58-2f68-43ed-a169-f62e1ffc008a",
+    "type": "ambulance",
+    "status": "deployed",
+    "current_lat": 24.86,
+    "current_lng": 67.01,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Saddar Clinic",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "d92cc2f5-5678-453e-ad96-749fbe751b88",
+    "type": "rescue_team",
+    "status": "deployed",
+    "current_lat": 24.85,
+    "current_lng": 67.02,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "PDMA Unit",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "bf470d33-68ea-440b-8da8-84721df2e119",
+    "type": "rescue_team",
+    "status": "deployed",
+    "current_lat": 24.855,
+    "current_lng": 67.05,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Rescue 1122 HQ",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "3a51d6e5-8191-4c41-aa92-7928d124520d",
+    "type": "rescue_team",
+    "status": "deployed",
+    "current_lat": 24.86,
+    "current_lng": 67.06,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Civil Defence",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "d6c884ec-8d92-497b-8d0e-19d25a5ba7c3",
+    "type": "ambulance",
+    "status": "deployed",
+    "current_lat": 24.855,
+    "current_lng": 67.04,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Jinnah Hospital",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "df3c7047-852c-4ada-b586-b4ecf6f42b18",
+    "type": "ambulance",
+    "status": "deployed",
+    "current_lat": 24.86,
+    "current_lng": 67.03,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Civil Hospital",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "1292e21c-3d41-48b3-bfbb-14afeb73de6f",
+    "type": "water_tanker",
+    "status": "deployed",
+    "current_lat": 24.835,
+    "current_lng": 67.04,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "KWSB Water Dept",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "118acaa7-9932-48c8-8c39-b3c1d81f9d7e",
+    "type": "drone",
+    "status": "deployed",
+    "current_lat": 24.855,
+    "current_lng": 67.05,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "PDMA Drone Unit",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "dac124ba-131b-45d1-83cf-c44a406bebc3",
+    "type": "ambulance",
+    "status": "deployed",
+    "current_lat": 24.895,
+    "current_lng": 67.065,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Liaquat National Hospital",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "0069b9a2-b922-4243-94b9-0cf5a47ff1d4",
+    "type": "field_team",
+    "status": "deployed",
+    "current_lat": 24.852,
+    "current_lng": 67.042,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "KMC Field Office",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "ac4f4fca-daea-4331-9487-614297485b05",
+    "type": "generator",
+    "status": "deployed",
+    "current_lat": 24.84,
+    "current_lng": 67.048,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "K-Electric Store",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "e64960d4-32a8-469e-bf3b-86799df046ad",
+    "type": "water_tanker",
+    "status": "deployed",
+    "current_lat": 24.89,
+    "current_lng": 67.055,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "KWSB Depot",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "df57907b-52fe-4f50-a98c-0f4ba2b62ace",
+    "type": "ambulance",
+    "status": "deployed",
+    "current_lat": 24.89,
+    "current_lng": 67.058,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Aga Khan Hospital",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "81dd8330-3827-4daa-8a0c-ceb8af5b50e4",
+    "type": "police_unit",
+    "status": "deployed",
+    "current_lat": 24.84,
+    "current_lng": 67.05,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "DHA Police Station",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  },
+  {
+    "id": "e2b9e385-a06a-4ddd-b2bf-c5d7bb5c81b1",
+    "type": "police_unit",
+    "status": "deployed",
+    "current_lat": 24.83,
+    "current_lng": 67.035,
+    "assigned_crisis_id": null,
+    "eta_minutes": null,
+    "base_name": "Clifton Police Station",
+    "created_at": "2026-05-17T17:29:35.650819+00:00"
+  }
+]
