@@ -1,35 +1,199 @@
-# Python
+# =============================================================================
+# PYTHON (backend)
+# =============================================================================
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+*.egg
 *.egg-info/
-venv/
-.env
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+MANIFEST
 
-# Flutter
+# Virtual environments
+.venv/
+.venv_new/
+venv/
+venv.bak/
+ENV/
+env/
+env.bak/
+.Python
+
+# Test & coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+
+# MyPy / type-checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# =============================================================================
+# ENVIRONMENT & SECRETS
+# =============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+secrets.yaml
+
+# =============================================================================
+# FLUTTER / DART (mobile)
+# =============================================================================
 mobile/.dart_tool/
 mobile/.packages
 mobile/.pub/
+mobile/.pub-cache/
 mobile/build/
+mobile/coverage/
 mobile/.flutter-plugins
 mobile/.flutter-plugins-dependencies
+
+# Android build artifacts
 mobile/android/.gradle/
+mobile/android/app/debug/
+mobile/android/app/profile/
+mobile/android/app/release/
+mobile/android/local.properties
+mobile/android/key.properties
+
+# iOS build artifacts
 mobile/ios/Pods/
 mobile/ios/.symlinks/
+mobile/ios/Flutter/.last_build_id
+mobile/ios/Flutter/flutter_export_environment.sh
+
+# macOS / Linux / Windows Flutter
+mobile/macos/Flutter/ephemeral/
+mobile/linux/flutter/ephemeral/
+mobile/windows/flutter/ephemeral/
+
+# Obfuscation & symbolication
+mobile/app.*.symbols
+mobile/app.*.map.json
+
+# Generated code
+mobile/**/*.g.dart
+mobile/**/*.freezed.dart
+mobile/**/*.mocks.dart
+
+# Build outputs
 *.apk
 *.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
 
-# IDE
+# =============================================================================
+# SUPABASE
+# =============================================================================
+supabase/.temp/
+supabase/.branches/
+supabase/functions/.cache/
+
+# =============================================================================
+# NODE / JS (if any tooling)
+# =============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+.npm/
+.yarn/
+dist/
+.next/
+.nuxt/
+.cache/
+package-lock.json
+yarn.lock
+
+# =============================================================================
+# IDE & EDITORS
+# =============================================================================
 .vscode/
 .idea/
+*.iml
+*.ipr
+*.iws
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
+.atom/
+.history/
 
-# OS
+# =============================================================================
+# OPERATING SYSTEM
+# =============================================================================
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
 
-# Supabase
-supabase/.temp/
+# Linux
+*~
 
-# Docs
+# =============================================================================
+# LOGS & TEMP FILES
+# =============================================================================
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.pid
+*.seed
+*.pid.lock
+logs/
+temp/
+tmp/
+
+# =============================================================================
+# DOCS / TRACES (generated artifacts)
+# =============================================================================
 docs/traces/*.json
+docs/video/*.mp4
+docs/video/*.mov
+
+# =============================================================================
+# MISC
+# =============================================================================
+*.class
+.svn/
+.hg/
+.bzr/
