@@ -16,6 +16,16 @@ class TraceLogger:
         self.traces: list[AgentTrace] = []
 
     def _save_to_supabase(self, trace_data: Dict):
+<<<<<<< HEAD
+        """Helper to save trace to Supabase in a background thread."""
+        try:
+            # The database table is named 'traces' and has 'created_at' instead of 'timestamp'
+            if "timestamp" in trace_data:
+                del trace_data["timestamp"]
+            supabase.table('traces').insert(trace_data).execute()
+        except Exception as e:
+            print(f"[TRACE ERROR] Failed to save trace to Supabase: {e}")
+=======
         """Helper to save trace to Supabase in a background thread with retry."""
         import time
         
@@ -35,6 +45,7 @@ class TraceLogger:
                     continue
                 # If it still fails after the retry, print the error
                 print(f"[TRACE ERROR] Failed to save trace to Supabase after retry: {e}")
+>>>>>>> origin/main
 
     def log(self, agent: str, trace_type: TraceType, input_data: Dict, output_data: Dict,
             confidence: Optional[float] = None, latency_ms: Optional[int] = None,

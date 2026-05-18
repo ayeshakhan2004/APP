@@ -13,7 +13,11 @@ class ActionSimulatorAgent(BaseAgent):
     async def execute(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         allocations = input_data.get("allocations", [])
 
+<<<<<<< HEAD
+        prompt = f"""You are a Crisis Response Action Simulator for Islamabad. You model the BEFORE and AFTER states of response actions.
+=======
         prompt = f"""You are a Crisis Response Action Simulator for Karachi. You model the BEFORE and AFTER states of response actions.
+>>>>>>> origin/main
 
 RESOURCE ALLOCATIONS:
 {json.dumps(allocations, indent=2, default=str)}
