@@ -1,0 +1,51 @@
+[
+  {
+    "id": "iot-001",
+    "source": "iot_sensor",
+    "sensor_type": "water_level",
+    "location": {"lat": 24.8280, "lng": 67.0335, "area": "Clifton Nullah"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "reading": 2.8,
+    "unit": "meters",
+    "threshold": 2.0,
+    "status": "above_threshold",
+    "battery_pct": 72
+  },
+  {
+    "id": "iot-002",
+    "source": "iot_sensor",
+    "sensor_type": "water_level",
+    "location": {"lat": 24.8270, "lng": 67.0340, "area": "Clifton Block 2 Drain"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "reading": 1.5,
+    "unit": "meters",
+    "threshold": 2.0,
+    "status": "normal",
+    "battery_pct": 85
+  },
+  {
+    "id": "iot-003",
+    "source": "iot_sensor",
+    "sensor_type": "temperature",
+    "location": {"lat": 24.8390, "lng": 67.0480, "area": "DHA Weather Station"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "reading": 46.1,
+    "unit": "celsius",
+    "threshold": 42.0,
+    "status": "above_threshold",
+    "battery_pct": 90
+  },
+  {
+    "id": "iot-004",
+    "source": "iot_sensor",
+    "sensor_type": "water_pressure",
+    "location": {"lat": 24.8279, "lng": 67.0333, "area": "Clifton Water Main"},
+    "timestamp": "2026-05-14T14:30:00Z",
+    "reading": 12,
+    "unit": "psi",
+    "threshold": 40,
+    "status": "critically_low",
+    "battery_pct": 65,
+    "note": "Sudden pressure drop suggests pipe burst"
+  }
+]

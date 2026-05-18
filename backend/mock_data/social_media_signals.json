@@ -1,0 +1,63 @@
+[
+  {
+    "id": "sm-001",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "Massive flooding in Clifton Karachi! Water is waist-deep near the main market. People stranded! #KarachiFloods",
+    "user": "citizen_reporter_1",
+    "location": {"lat": 24.8281, "lng": 67.0336, "area": "Clifton"},
+    "timestamp": "2026-05-14T14:30:00Z",
+    "likes": 245,
+    "retweets": 89,
+    "urgency_keywords": ["massive", "stranded", "waist-deep"]
+  },
+  {
+    "id": "sm-002",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "Water rising fast in Clifton Block 2, cars stuck on the road. Someone please send help!",
+    "user": "citizen_reporter_2",
+    "location": {"lat": 24.8275, "lng": 67.0340, "area": "Clifton Block 2"},
+    "timestamp": "2026-05-14T14:35:00Z",
+    "likes": 120,
+    "retweets": 45,
+    "urgency_keywords": ["rising fast", "stuck", "help"]
+  },
+  {
+    "id": "sm-003",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "I think it's just a water main burst in Clifton, not actual flooding. Saw KWSB workers near the pipe.",
+    "user": "local_observer",
+    "location": {"lat": 24.8278, "lng": 67.0332, "area": "Clifton"},
+    "timestamp": "2026-05-14T14:40:00Z",
+    "likes": 30,
+    "retweets": 12,
+    "urgency_keywords": [],
+    "is_contradictory": true
+  },
+  {
+    "id": "sm-004",
+    "source": "social_media",
+    "platform": "facebook",
+    "text": "Extremely hot day in DHA. My elderly neighbor fainted. No electricity for 4 hours. This is dangerous!",
+    "user": "dha_resident",
+    "location": {"lat": 24.8390, "lng": 67.0480, "area": "DHA"},
+    "timestamp": "2026-05-14T14:25:00Z",
+    "likes": 180,
+    "retweets": 0,
+    "urgency_keywords": ["fainted", "dangerous", "no electricity"]
+  },
+  {
+    "id": "sm-005",
+    "source": "social_media",
+    "platform": "twitter",
+    "text": "Multiple people reporting heat stroke symptoms in DHA Phase 1. Need medical attention ASAP.",
+    "user": "health_volunteer",
+    "location": {"lat": 24.8385, "lng": 67.0475, "area": "DHA Phase 1"},
+    "timestamp": "2026-05-14T14:45:00Z",
+    "likes": 95,
+    "retweets": 67,
+    "urgency_keywords": ["heat stroke", "medical attention", "ASAP"]
+  }
+]

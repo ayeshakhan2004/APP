@@ -1,0 +1,41 @@
+[
+  {
+    "id": "tr-001",
+    "source": "traffic",
+    "provider": "google_maps",
+    "location": {"lat": 24.8281, "lng": 67.0336, "area": "Clifton Main Road"},
+    "timestamp": "2026-05-14T14:30:00Z",
+    "congestion_level": "severe",
+    "speed_kmh": 5,
+    "normal_speed_kmh": 45,
+    "delay_minutes": 42,
+    "incidents_reported": 3,
+    "road_closure": false
+  },
+  {
+    "id": "tr-002",
+    "source": "traffic",
+    "provider": "google_maps",
+    "location": {"lat": 24.8260, "lng": 67.0310, "area": "Clifton to DHA Link"},
+    "timestamp": "2026-05-14T14:35:00Z",
+    "congestion_level": "heavy",
+    "speed_kmh": 12,
+    "normal_speed_kmh": 50,
+    "delay_minutes": 28,
+    "incidents_reported": 1,
+    "road_closure": false
+  },
+  {
+    "id": "tr-003",
+    "source": "traffic",
+    "provider": "google_maps",
+    "location": {"lat": 24.8390, "lng": 67.0480, "area": "DHA Internal Roads"},
+    "timestamp": "2026-05-14T14:30:00Z",
+    "congestion_level": "normal",
+    "speed_kmh": 38,
+    "normal_speed_kmh": 40,
+    "delay_minutes": 2,
+    "incidents_reported": 0,
+    "road_closure": false
+  }
+]
