@@ -4,11 +4,9 @@ from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
 import json
 import os
-<<<<<<< HEAD
 
 router = APIRouter()
 
-=======
 from supabase import create_client
 from dotenv import load_dotenv
 
@@ -22,7 +20,6 @@ supabase = create_client(supabase_url, supabase_key)
 router = APIRouter()
 
 
->>>>>>> origin/main
 MOCK_DIR = os.path.join(os.path.dirname(__file__), '..', 'mock_data')
 
 
@@ -58,15 +55,12 @@ async def run_full_pipeline():
     for fname in ['social_media_signals.json', 'weather_signals.json', 'traffic_signals.json', 'emergency_calls.json', 'iot_sensors.json']:
         signals.extend(load_mock(fname))
 
-<<<<<<< HEAD
     resources = load_mock('resources_inventory.json')
-=======
     # Fetch the real resources you just seeded into Supabase!
     db_resources = supabase.table('resources').select("*").eq("status", "available").execute()
         
     # Use the database resources. If it fails for any reason, fallback to the mock data.
     resources = db_resources.data if hasattr(db_resources, 'data') and db_resources.data else load_mock('resources_inventory.json')
->>>>>>> origin/main
 
     orchestrator = CIROOrchestrator()
     result = await orchestrator.run_pipeline(signals, resources)
@@ -102,13 +96,11 @@ async def get_traces():
 
 @router.post("/traces/export")
 async def export_traces(data: Dict[str, Any] = {"scenario": "default"}):
-<<<<<<< HEAD
     """Export traces to JSON file."""
     from utils.trace_logger import trace_logger
     scenario = data.get("scenario", "default")
     path = trace_logger.export_traces(scenario)
     return {"exported_to": path, "trace_count": len(trace_logger.traces)}
-=======
     """Export all Supabase traces to a JSON file."""
     try:
         scenario = data.get("scenario", "default")
@@ -219,4 +211,3 @@ async def export_allocations(data: Dict[str, Any] = {"scenario": "default"}):
         return {"exported_to": path, "allocation_count": len(db_allocations)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to export allocations: {str(e)}")
->>>>>>> origin/main
