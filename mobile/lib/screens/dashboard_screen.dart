@@ -1,860 +1,574 @@
-<<<<<<< HEAD
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
 // ─────────────────────────────────────────────────────────────
-//  DESIGN TOKENS  —  Single unified green gradient theme
+//  DESIGN TOKENS — High Contrast & Frosted Theme
 // ─────────────────────────────────────────────────────────────
-class _C {
-  // Brand gradient
-  static const g1 = Color(0xFF00E87A); // neon mint-green
-  static const g2 = Color(0xFF00C6FF); // cyan-blue
-
-  // Background
-  static const bg = Color(0xFF030C0F);
-
-  // Semantic (kept for alert readability only)
-  static const danger  = Color(0xFFFF4D6D);
-  static const warning = Color(0xFFFFB347);
-  static const safe    = Color(0xFF00E87A);
-
-  // Text
-  static const textPrimary   = Colors.white;
-  static const textSecondary = Color(0xFF9EB3B8);
-  static const textMuted     = Color(0xFF3D5A60);
-
-  static List<Color> get brand => [g1, g2];
-  static Color glW(double o)   => Colors.white.withOpacity(o);
+class AppColors {
+  static const background = Color(0xFF0F172A); // Deep Slate/Navy Blue
+  
+  // Brand Palette
+  static const cyan = Color(0xFF00E5FF);
+  static const yellow = Color(0xFFFFD54F);
+  static const green = Color(0xFF00E676);
+  static const sosRed = Color(0xFFFF2A5F); // Glowing Red for SOS
+  
+  // Text Colors
+  static const textPrimary = Color(0xFFFFFFFF);
+  static const textSecondary = Color(0xFFCBD5E1); 
 }
 
 // ─────────────────────────────────────────────────────────────
-//  BRAND GRADIENT TEXT
+//  FROSTED GLASS CARD COMPONENT
 // ─────────────────────────────────────────────────────────────
-class _BrandText extends StatelessWidget {
-  final String text;
-  final TextStyle style;
-  const _BrandText(this.text, {required this.style});
-
-  @override
-  Widget build(BuildContext context) => ShaderMask(
-        shaderCallback: (r) =>
-            const LinearGradient(colors: [_C.g1, _C.g2]).createShader(r),
-        child: Text(text, style: style.copyWith(color: Colors.white)),
-      );
-}
-
-// ─────────────────────────────────────────────────────────────
-//  HOVER GLASS CARD
-// ─────────────────────────────────────────────────────────────
-class _HoverCard extends StatefulWidget {
+class FrostedGlassCard extends StatelessWidget {
   final Widget child;
   final double radius;
   final EdgeInsets padding;
+  final double? height;
+  final double? width;
 
-  const _HoverCard({
+  const FrostedGlassCard({
+    super.key,
     required this.child,
-    this.radius = 24,
+    this.radius = 24, 
     this.padding = const EdgeInsets.all(20),
+    this.height,
+    this.width,
   });
 
   @override
-  State<_HoverCard> createState() => _HoverCardState();
-}
-
-class _HoverCardState extends State<_HoverCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ac =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 280));
-  late final Animation<double> _t =
-      CurvedAnimation(parent: _ac, curve: Curves.easeOut);
-
-  @override
-  void dispose() { _ac.dispose(); super.dispose(); }
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => _ac.forward(),
-      onExit:  (_) => _ac.reverse(),
-      child: AnimatedBuilder(
-        animation: _t,
-        builder: (_, __) {
-          final v = _t.value;
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.radius),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.45),
-                  blurRadius: 28, offset: const Offset(0, 12),
-                ),
-                BoxShadow(
-                  color: _C.g1.withOpacity(0.18 * v),
-                  blurRadius: 55, spreadRadius: 4,
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(widget.radius),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 28, sigmaY: 28),
-                child: Container(
-                  padding: widget.padding,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(widget.radius),
-                    color: Colors.white.withOpacity(0.04 + 0.04 * v),
-                    border: Border.all(
-                      color: _C.g1.withOpacity(0.08 + 0.18 * v),
-                      width: 1.0,
-                    ),
-                  ),
-                  child: widget.child,
-                ),
-              ),
-            ),
-          );
-        },
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 20,
+            spreadRadius: -5,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
-//  STAT CARD
-// ─────────────────────────────────────────────────────────────
-class _StatCard extends StatefulWidget {
-  final String title, value;
-  final IconData icon;
-  const _StatCard({required this.title, required this.value, required this.icon});
-
-  @override
-  State<_StatCard> createState() => _StatCardState();
-}
-
-class _StatCardState extends State<_StatCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ac =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 320));
-  late final Animation<double> _t =
-      CurvedAnimation(parent: _ac, curve: Curves.easeOutBack);
-
-  @override
-  void dispose() { _ac.dispose(); super.dispose(); }
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => _ac.forward(),
-      onExit:  (_) => _ac.reverse(),
-      child: AnimatedBuilder(
-        animation: _t,
-        builder: (_, __) {
-          final v = _t.value;
-          return Transform.scale(
-            scale: 1.0 + 0.028 * v,
-            child: Container(
-              height: 190,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(28),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.45),
-                    blurRadius: 28, offset: const Offset(0, 14),
-                  ),
-                  BoxShadow(
-                    color: _C.g1.withOpacity(0.28 * v),
-                    blurRadius: 60, spreadRadius: 4,
-                  ),
-                  BoxShadow(
-                    color: _C.g2.withOpacity(0.15 * v),
-                    blurRadius: 90, spreadRadius: 8,
-                  ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+          child: Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.05), 
+              borderRadius: BorderRadius.circular(radius),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.25), 
+                width: 1.2,
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withOpacity(0.15),
+                  Colors.white.withOpacity(0.02),
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(28),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 26, sigmaY: 26),
-                  child: Container(
-                    padding: const EdgeInsets.all(22),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          _C.g1.withOpacity(0.10 + 0.15 * v),
-                          _C.g2.withOpacity(0.05 + 0.08 * v),
-                          Colors.white.withOpacity(0.01),
-                        ],
-                      ),
-                      border: Border.all(
-                        color: _C.g1.withOpacity(0.12 + 0.35 * v),
-                        width: 1.0,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 52, height: 52,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: _C.brand,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: _C.g1.withOpacity(0.45 + 0.35 * v),
-                                blurRadius: 18 + 16 * v, spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: Icon(widget.icon, color: Colors.white, size: 22),
-                        ),
-                        const Spacer(),
-                        _BrandText(
-                          widget.value,
-                          style: const TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -1.5,
-                            height: 1.0,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(widget.title,
-                          style: const TextStyle(
-                            color: _C.textSecondary,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.3,
-                          )),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
-//  ALERT TILE  —  ⚠️ NO child= param in AnimatedBuilder
-//  (Flutter Web: BackdropFilter clips child when child= is used)
-// ─────────────────────────────────────────────────────────────
-class _AlertTile extends StatefulWidget {
-  final IconData icon;
-  final String title, subtitle;
-  final Color color;
-
-  const _AlertTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.color,
-  });
-
-  @override
-  State<_AlertTile> createState() => _AlertTileState();
-}
-
-class _AlertTileState extends State<_AlertTile>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ac =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 260));
-  late final Animation<double> _t =
-      CurvedAnimation(parent: _ac, curve: Curves.easeOut);
-
-  @override
-  void dispose() { _ac.dispose(); super.dispose(); }
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => _ac.forward(),
-      onExit:  (_) => _ac.reverse(),
-      child: AnimatedBuilder(
-        animation: _t,
-        builder: (ctx, _) {          // ← no child= intentional
-          final v = _t.value;
-          return Transform.translate(
-            offset: Offset(5 * v, 0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.4),
-                    blurRadius: 22, offset: const Offset(0, 8),
-                  ),
-                  BoxShadow(
-                    color: widget.color.withOpacity(0.22 * v),
-                    blurRadius: 44, spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(22),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 26, sigmaY: 26),
-                  child: Container(
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
-                      color: Colors.white.withOpacity(0.04 + 0.04 * v),
-                      border: Border(
-                        left:   BorderSide(color: widget.color.withOpacity(0.35 + 0.50 * v), width: 2.5),
-                        top:    BorderSide(color: _C.glW(0.05 + 0.06 * v)),
-                        right:  BorderSide(color: _C.glW(0.04 + 0.04 * v)),
-                        bottom: BorderSide(color: _C.glW(0.04 + 0.04 * v)),
-                      ),
-                    ),
-                    child: Row(children: [
-                      Container(
-                        width: 52, height: 52,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: widget.color.withOpacity(0.12),
-                          border: Border.all(
-                            color: widget.color.withOpacity(0.20 + 0.30 * v),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: widget.color.withOpacity(0.22 * v),
-                              blurRadius: 18, spreadRadius: 1,
-                            ),
-                          ],
-                        ),
-                        child: Icon(widget.icon, color: widget.color, size: 22),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(widget.title,
-                              style: const TextStyle(
-                                color: _C.textPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.1,
-                              )),
-                            const SizedBox(height: 4),
-                            Text(widget.subtitle,
-                              style: const TextStyle(
-                                color: _C.textSecondary, fontSize: 13)),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Colors.white.withOpacity(0.22 + 0.45 * v),
-                        size: 14,
-                      ),
-                    ]),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
-//  ACTIVITY ROW  —  same fix
-// ─────────────────────────────────────────────────────────────
-class _ActivityRow extends StatefulWidget {
-  final IconData icon;
-  final String title, time;
-  const _ActivityRow({required this.icon, required this.title, required this.time});
-
-  @override
-  State<_ActivityRow> createState() => _ActivityRowState();
-}
-
-class _ActivityRowState extends State<_ActivityRow>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ac =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 220));
-  late final Animation<double> _t =
-      CurvedAnimation(parent: _ac, curve: Curves.easeOut);
-
-  @override
-  void dispose() { _ac.dispose(); super.dispose(); }
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => _ac.forward(),
-      onExit:  (_) => _ac.reverse(),
-      child: AnimatedBuilder(
-        animation: _t,
-        builder: (_, __) {
-          final v = _t.value;
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: Colors.white.withOpacity(0.04 * v),
-            ),
-            child: Row(children: [
-              Container(
-                width: 40, height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(colors: [
-                    _C.g1.withOpacity(0.15 + 0.15 * v),
-                    _C.g2.withOpacity(0.10 + 0.10 * v),
-                  ]),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _C.g1.withOpacity(0.25 * v),
-                      blurRadius: 14, spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                child: Icon(widget.icon,
-                    color: Color.lerp(_C.textSecondary, _C.g1, v), size: 18),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(widget.title,
-                  style: const TextStyle(
-                    color: _C.textPrimary,
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.w500,
-                  )),
-              ),
-              Text(widget.time,
-                style: const TextStyle(color: _C.textMuted, fontSize: 12)),
-            ]),
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────
-//  ANIMATED ORB
-// ─────────────────────────────────────────────────────────────
-class _Orb extends StatefulWidget {
-  final double size, top, left, opacity;
-  final Duration duration;
-  final Color color;
-  const _Orb({
-    required this.size, required this.top, required this.left,
-    required this.duration, required this.color, this.opacity = 0.16,
-  });
-
-  @override
-  State<_Orb> createState() => _OrbState();
-}
-
-class _OrbState extends State<_Orb> with SingleTickerProviderStateMixin {
-  late final AnimationController _ac =
-      AnimationController(vsync: this, duration: widget.duration)
-        ..repeat(reverse: true);
-  late final Animation<double> _s =
-      Tween<double>(begin: 0.85, end: 1.15)
-          .animate(CurvedAnimation(parent: _ac, curve: Curves.easeInOut));
-  late final Animation<double> _o =
-      Tween<double>(begin: widget.opacity * 0.55, end: widget.opacity)
-          .animate(CurvedAnimation(parent: _ac, curve: Curves.easeInOut));
-
-  @override
-  void dispose() { _ac.dispose(); super.dispose(); }
-
-  @override
-  Widget build(BuildContext context) => Positioned(
-    top: widget.top, left: widget.left,
-    child: AnimatedBuilder(
-      animation: _ac,
-      builder: (_, __) => Transform.scale(
-        scale: _s.value,
-        child: Container(
-          width: widget.size, height: widget.size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: RadialGradient(colors: [
-              widget.color.withOpacity(_o.value),
-              widget.color.withOpacity(0),
-            ]),
+            child: child,
           ),
         ),
       ),
-    ),
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-//  SECTION LABEL
-// ─────────────────────────────────────────────────────────────
-class _Section extends StatelessWidget {
-  final String label;
-  const _Section(this.label);
-
-  @override
-  Widget build(BuildContext context) => Row(children: [
-    _BrandText(label, style: const TextStyle(
-      fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
-    const SizedBox(width: 14),
-    Expanded(
-      child: Container(
-        height: 1,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            _C.g1.withOpacity(0.25),
-            _C.g2.withOpacity(0.10),
-            Colors.transparent,
-          ]),
-        ),
-      ),
-    ),
-  ]);
-}
-
-// ─────────────────────────────────────────────────────────────
-//  GRID PAINTER
-// ─────────────────────────────────────────────────────────────
-class _GridPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()
-      ..color = _C.g1.withOpacity(0.018)
-      ..strokeWidth = 0.5;
-    const s = 60.0;
-    for (double x = 0; x < size.width; x += s) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), p);
-    }
-    for (double y = 0; y < size.height; y += s) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), p);
-    }
+    );
   }
-  @override
-  bool shouldRepaint(covariant CustomPainter _) => false;
 }
 
 // ─────────────────────────────────────────────────────────────
 //  DASHBOARD SCREEN
 // ─────────────────────────────────────────────────────────────
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
-
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen>
-    with SingleTickerProviderStateMixin {
-  Offset _mouse = const Offset(300, 300);
-
-  late final AnimationController _ac =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 1200));
-  late final Animation<double> _fade =
-      CurvedAnimation(parent: _ac, curve: Curves.easeIn);
-  late final Animation<Offset> _slide = Tween<Offset>(
-    begin: const Offset(0, 0.06), end: Offset.zero,
-  ).animate(CurvedAnimation(parent: _ac, curve: Curves.easeOutExpo));
-
-  @override
-  void initState() { super.initState(); _ac.forward(); }
-
-  @override
-  void dispose() { _ac.dispose(); super.dispose(); }
-
-  static const _stats = [
-    (title: 'Active Crises',  value: '12',  icon: Icons.warning_amber_rounded),
-    (title: 'Resources',      value: '48',  icon: Icons.inventory_2_outlined),
-    (title: 'Alerts Sent',    value: '126', icon: Icons.notifications_active_outlined),
-    (title: 'Safe Zones',     value: '16',  icon: Icons.shield_outlined),
-  ];
-
-  Widget _statsGrid(BuildContext context, BoxConstraints c) {
-    if (c.maxWidth > 700) {
-      return Column(children: [
-        Row(children: [
-          Expanded(child: _StatCard(title: _stats[0].title, value: _stats[0].value, icon: _stats[0].icon)),
-          const SizedBox(width: 14),
-          Expanded(child: _StatCard(title: _stats[1].title, value: _stats[1].value, icon: _stats[1].icon)),
-        ]),
-        const SizedBox(height: 14),
-        Row(children: [
-          Expanded(child: _StatCard(title: _stats[2].title, value: _stats[2].value, icon: _stats[2].icon)),
-          const SizedBox(width: 14),
-          Expanded(child: _StatCard(title: _stats[3].title, value: _stats[3].value, icon: _stats[3].icon)),
-        ]),
-      ]);
-    }
-    return Column(children: [
-      for (final s in _stats) ...[
-        _StatCard(title: s.title, value: s.value, icon: s.icon),
-        const SizedBox(height: 14),
-      ],
-    ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onHover: (e) => setState(() => _mouse = e.localPosition),
-      child: Scaffold(
-        backgroundColor: _C.bg,
-        body: Stack(children: [
-
-          Positioned.fill(child: CustomPaint(painter: _GridPainter())),
-
-          // Green orbs
-          _Orb(color: _C.g1, size: 500, top: -180, left: -120,
-              duration: const Duration(seconds: 8), opacity: 0.12),
-          _Orb(color: _C.g2, size: 380, top: 180, left: -60,
-              duration: const Duration(seconds: 10), opacity: 0.09),
-          _Orb(color: _C.g1, size: 260, top: 480, left: 400,
-              duration: const Duration(seconds: 7), opacity: 0.07),
-          _Orb(color: _C.g2, size: 300, top: 80, left: 480,
-              duration: const Duration(seconds: 12), opacity: 0.06),
-
-          // Mouse glow
-          Positioned(
-            left: _mouse.dx - 220,
-            top:  _mouse.dy - 220,
-            child: IgnorePointer(
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 80),
-                width: 440, height: 440,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(colors: [
-                    _C.g1.withOpacity(0.13),
-                    _C.g2.withOpacity(0.06),
-                    Colors.transparent,
-                  ], stops: const [0.0, 0.4, 1.0]),
-                ),
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: FadeTransition(
-              opacity: _fade,
-              child: SlideTransition(
-                position: _slide,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      // Top bar
-                      Wrap(
-                        alignment: WrapAlignment.spaceBetween,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runSpacing: 14, spacing: 14,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              _BrandText('CIRO', style: const TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.w900,
-                                letterSpacing: 2.0)),
-                              const SizedBox(width: 10),
-                              const Text('Dashboard', style: TextStyle(
-                                color: _C.textSecondary, fontSize: 20,
-                                fontWeight: FontWeight.w400)),
-                            ],
-                          ),
-                          _HoverCard(
-                            radius: 100,
-                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.search_rounded, color: _C.textSecondary, size: 18),
-                                const SizedBox(width: 10),
-                                const Text('Search...', style: TextStyle(
-                                    color: _C.textMuted, fontSize: 14)),
-                                const SizedBox(width: 24),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    color: _C.g1.withOpacity(0.08),
-                                    border: Border.all(color: _C.g1.withOpacity(0.18)),
-                                  ),
-                                  child: const Text('⌘ K', style: TextStyle(
-                                      color: _C.textMuted, fontSize: 11, letterSpacing: 0.5)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 36),
-
-                      // Hero header
-                      Row(children: [
-                        Container(
-                          width: 5, height: 46,
-                          margin: const EdgeInsets.only(right: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [_C.g1, _C.g2],
-                            ),
-                            boxShadow: [BoxShadow(
-                              color: _C.g1.withOpacity(0.6),
-                              blurRadius: 14, spreadRadius: 1,
-                            )],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text('Emergency Overview',
-                              style: TextStyle(
-                                color: _C.textPrimary,
-                                fontSize: 34, fontWeight: FontWeight.w800,
-                                letterSpacing: -0.8, height: 1.1,
-                              )),
-                            SizedBox(height: 6),
-                            Text('Monitor crises and emergency response in real time.',
-                              style: TextStyle(color: _C.textSecondary, fontSize: 14.5)),
-                          ],
-                        ),
-                      ]),
-
-                      const SizedBox(height: 30),
-
-                      LayoutBuilder(builder: _statsGrid),
-
-                      const SizedBox(height: 36),
-
-                      const _Section('Live Alerts'),
-                      const SizedBox(height: 16),
-
-                      const _AlertTile(
-                        icon: Icons.flood,
-                        title: 'Flood Warning',
-                        subtitle: 'High water levels detected in Sector 12',
-                        color: _C.danger,
-                      ),
-                      const SizedBox(height: 12),
-                      const _AlertTile(
-                        icon: Icons.medical_services_outlined,
-                        title: 'Medical Emergency',
-                        subtitle: 'Ambulance dispatched near Downtown',
-                        color: _C.warning,
-                      ),
-                      const SizedBox(height: 12),
-                      const _AlertTile(
-                        icon: Icons.home_work_outlined,
-                        title: 'Shelter Activated',
-                        subtitle: 'Emergency shelter opened in City Hall',
-                        color: _C.safe,
-                      ),
-
-                      const SizedBox(height: 36),
-
-                      const _Section('Recent Activity'),
-                      const SizedBox(height: 16),
-
-                      _HoverCard(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        radius: 24,
-                        child: const Column(children: [
-                          _ActivityRow(
-                            icon: Icons.location_on_outlined,
-                            title: 'Rescue team deployed',
-                            time: '2 min ago',
-                          ),
-                          Divider(color: Color(0x0FFFFFFF), height: 1),
-                          _ActivityRow(
-                            icon: Icons.wifi_tethering,
-                            title: 'Emergency signal received',
-                            time: '5 min ago',
-                          ),
-                          Divider(color: Color(0x0FFFFFFF), height: 1),
-                          _ActivityRow(
-                            icon: Icons.check_circle_outline,
-                            title: 'Area marked safe',
-                            time: '10 min ago',
-                          ),
-                        ]),
-                      ),
-
-                      const SizedBox(height: 40),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ]),
-=======
-import 'package:flutter/material.dart';
-
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('CIRO Dashboard')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildStatCard('Active Crises', '2', Colors.red),
-            const SizedBox(height: 16),
-            _buildStatCard('Resources Deployed', '8', Colors.blue),
-            const SizedBox(height: 16),
-            _buildStatCard('Alerts Sent', '14', Colors.orange),
-            const SizedBox(height: 24),
-            const Text('Recent Activity', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const Expanded(
-              child: Center(child: Text('Simulated signals flowing...')),
+      backgroundColor: AppColors.background,
+      extendBody: true, // Yeh navbar ko floating look dega aur background uske peeche nazar aayega
+      
+      // 1. QUICK ACTION / SOS FAB
+      floatingActionButton: _buildSOSButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      
+      // FUTURISTIC FLOATING NAVBAR
+      bottomNavigationBar: _buildFuturisticBottomNav(),
+      
+      body: Stack(
+        children: [
+          // Subtle Background Glows
+          Positioned(
+            top: -100,
+            right: -50,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color(0xFF6366F1).withOpacity(0.25),
+                boxShadow: [BoxShadow(color: const Color(0xFF6366F1).withOpacity(0.25), blurRadius: 150, spreadRadius: 50)],
+              ),
             ),
+          ),
+          Positioned(
+            bottom: 50,
+            left: -100,
+            child: Container(
+              width: 250,
+              height: 250,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.cyan.withOpacity(0.15),
+                boxShadow: [BoxShadow(color: AppColors.cyan.withOpacity(0.15), blurRadius: 150, spreadRadius: 40)],
+              ),
+            ),
+          ),
+
+          // Main Content
+          SafeArea(
+            bottom: false, // Taa ke content neechay tak scroll ho
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 120.0), // Bottom padding extra di hai FAB aur Navbar ke liye
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Icon(Icons.menu, color: Colors.white, size: 28),
+                      // 2. WEATHER & ENVIRONMENT SNIPPET
+                      FrostedGlassCard(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        radius: 30,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.wb_cloudy_outlined, color: AppColors.cyan, size: 18),
+                            const SizedBox(width: 8),
+                            const Text('32°C • AQI 85', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.notifications_outlined, color: Colors.white, size: 28),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  
+                  // Main Titles
+                  const Text(
+                    'Emergency Overview',
+                    style: TextStyle(color: AppColors.textSecondary, fontSize: 15, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'Monitoring City\nStatus',
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 32,
+                          fontWeight: FontWeight.w800,
+                          height: 1.1,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      // 3. ACTIVE RESPONDERS AVATAR ROW
+                      _buildRespondersStack(),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Grid Stats Section
+                  SizedBox(
+                    height: 180, 
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildStatCard('Active Crises', '12', 'Critical', AppColors.yellow, Icons.warning_amber_rounded)),
+                        const SizedBox(width: 16),
+                        Expanded(child: _buildStatCard('Resources', '48', 'Deployed', AppColors.green, Icons.local_shipping_outlined)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // 4. MINI MAP SNIPPET
+                  FrostedGlassCard(
+                    height: 90,
+                    padding: const EdgeInsets.all(0),
+                    radius: 20,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(child: CustomPaint(painter: GridMapPainter())),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('Nearest Safe Zone', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.location_on, color: AppColors.green, size: 18),
+                                      const SizedBox(width: 6),
+                                      const Text('2.4 km away', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.cyan.withOpacity(0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.navigation_rounded, color: AppColors.cyan, size: 20),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 35),
+
+                  // Alerts Header
+                  const Text('Live Alerts', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 12),
+
+                  // 5. CATEGORY FILTER CHIPS
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildFilterChip('All', Icons.apps, true, Colors.white),
+                        _buildFilterChip('Medical', Icons.medical_services, false, AppColors.yellow),
+                        _buildFilterChip('Flood', Icons.water_drop, false, AppColors.cyan),
+                        _buildFilterChip('Fire', Icons.local_fire_department, false, AppColors.sosRed),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Alert List Items
+                  _buildAlertTile(Icons.water_drop, 'Flood Warning', 'Sector 12 - Water levels rising', AppColors.cyan),
+                  const SizedBox(height: 14),
+                  _buildAlertTile(Icons.medical_services, 'Medical Emergency', 'Downtown - Ambulance Dispatched', AppColors.yellow),
+                  const SizedBox(height: 14),
+                  _buildAlertTile(Icons.security, 'Area Secured', 'Gulshan - Police deployed', AppColors.green),
+                  
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- WIDGET BUILDERS ---
+
+  Widget _buildStatCard(String title, String value, String subtitle, Color color, IconData icon) {
+    return FrostedGlassCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: const TextStyle(color: AppColors.textPrimary, fontSize: 15, fontWeight: FontWeight.w600)),
+              Icon(icon, color: color, size: 24),
+            ],
+          ),
+          SizedBox(
+            height: 35,
+            child: CustomPaint(painter: NeonChartPainter(color: color), size: const Size(double.infinity, 35)),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(value, style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6.0),
+                child: Text(subtitle, style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.w700)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(String label, IconData icon, bool isActive, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12.0),
+      child: FrostedGlassCard(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        radius: 30,
+        child: Row(
+          children: [
+            Icon(icon, color: isActive ? AppColors.background : color, size: 16),
+            const SizedBox(width: 8),
+            Text(label, style: TextStyle(
+              color: isActive ? AppColors.background : Colors.white, 
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            )),
           ],
+        ),
+      ).wrapWithActiveState(isActive),
+    );
+  }
+
+  Widget _buildAlertTile(IconData icon, String title, String subtitle, Color accentColor) {
+    return FrostedGlassCard(
+      height: 90,
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      radius: 20,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: accentColor.withOpacity(0.15),
+              shape: BoxShape.circle,
+              border: Border.all(color: accentColor.withOpacity(0.4), width: 1.5),
+            ),
+            child: Icon(icon, color: accentColor, size: 24),
+          ),
+          const SizedBox(width: 18),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 6),
+                Text(subtitle, style: const TextStyle(color: AppColors.textSecondary, fontSize: 14, fontWeight: FontWeight.w400)),
+              ],
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios_rounded, color: Colors.white.withOpacity(0.3), size: 18),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRespondersStack() {
+    return SizedBox(
+      width: 100,
+      height: 40,
+      child: Stack(
+        children: [
+          Positioned(right: 0, child: _buildAvatarPlaceholder(Colors.blue, 'A')),
+          Positioned(right: 25, child: _buildAvatarPlaceholder(Colors.purple, 'S')),
+          Positioned(right: 50, child: _buildAvatarPlaceholder(Colors.teal, 'M')),
+          Positioned(right: 75, child: _buildAvatarPlaceholder(AppColors.background, '+3', isCount: true)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAvatarPlaceholder(Color color, String text, {bool isCount = false}) {
+    return Container(
+      width: 38,
+      height: 38,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Colors.white.withOpacity(0.8), width: 2),
+      ),
+      alignment: Alignment.center,
+      child: Text(text, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: isCount ? 12 : 16)),
+    );
+  }
+
+  Widget _buildSOSButton() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 90), // FAB ko navbar se thora upar rakha hai
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.sosRed.withOpacity(0.6),
+            blurRadius: 25,
+            spreadRadius: 5,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(35),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: AppColors.sosRed.withOpacity(0.8), 
+            elevation: 0,
+            child: const Text('SOS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(String title, String value, Color color) {
+  // 🔥 FUTURISTIC FLOATING NAVBAR
+  Widget _buildFuturisticBottomNav() {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(left: 20, right: 20, bottom: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color),
-      ),
-      child: Column(
-        children: [
-          Text(title, style: TextStyle(color: color, fontSize: 16)),
-          Text(value, style: TextStyle(color: color, fontSize: 32, fontWeight: FontWeight.bold)),
+        color: Colors.white.withOpacity(0.05), // Light frosted base
+        borderRadius: BorderRadius.circular(35),
+        border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 25,
+            offset: const Offset(0, 10),
+          ),
+          BoxShadow(
+            color: AppColors.cyan.withOpacity(0.05), // Subtle cyan glow base
+            blurRadius: 30,
+            spreadRadius: 5,
+          )
         ],
->>>>>>> origin/main
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(35),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildNavItem(Icons.dashboard_rounded, 'Dashboard', true),
+              _buildNavItem(Icons.map_outlined, 'Map', false),
+              _buildNavItem(Icons.list_alt_rounded, 'Resources', false),
+              _buildNavItem(Icons.notifications_outlined, 'Alerts', false),
+            ],
+          ),
+        ),
       ),
     );
   }
+
+  Widget _buildNavItem(IconData icon, String label, bool isActive) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon, 
+            color: isActive ? AppColors.cyan : Colors.white.withOpacity(0.5), 
+            size: isActive ? 28 : 24
+          ),
+          const SizedBox(height: 6),
+          if (isActive)
+            Container(
+              width: 18,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.cyan,
+                borderRadius: BorderRadius.circular(2),
+                boxShadow: [
+                  BoxShadow(color: AppColors.cyan, blurRadius: 10, spreadRadius: 2), // Neon underline glow
+                ],
+              ),
+            )
+          else
+            Text(label, style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 11, fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
+  }
+}
+
+// Extension to handle Active state of chips
+extension ActiveStateModifier on Widget {
+  Widget wrapWithActiveState(bool isActive) {
+    if (!isActive) return this;
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white, 
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [BoxShadow(color: Colors.white.withOpacity(0.3), blurRadius: 15)],
+      ),
+      child: this,
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  PAINTERS
+// ─────────────────────────────────────────────────────────────
+class NeonChartPainter extends CustomPainter {
+  final Color color;
+  NeonChartPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final path = Path();
+    path.moveTo(0, size.height * 0.7);
+    path.quadraticBezierTo(size.width * 0.25, size.height * 0.9, size.width * 0.5, size.height * 0.5);
+    path.quadraticBezierTo(size.width * 0.75, size.height * 0.1, size.width, size.height * 0.4);
+
+    canvas.drawPath(path, paint);
+    
+    final glowPaint = Paint()
+      ..color = color.withOpacity(0.4)
+      ..strokeWidth = 6.0
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4.0);
+      
+    canvas.drawPath(path, glowPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// Subtle Grid Map Painter
+class GridMapPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.05)
+      ..strokeWidth = 1;
+
+    for (double i = 0; i < size.width; i += 20) {
+      canvas.drawLine(Offset(i, 0), Offset(i, size.height), paint);
+    }
+    for (double i = 0; i < size.height; i += 20) {
+      canvas.drawLine(Offset(0, i), Offset(size.width, i), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
