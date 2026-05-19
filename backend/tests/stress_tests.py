@@ -101,11 +101,9 @@ async def scenario_5():
 async def main():
     print(f"{BOLD}🚀 STARTING CIRO FULL STRESS TEST SUITE{ENDC}")
     await scenario_1()
-<<<<<<< HEAD
     await scenario_2()
     await scenario_3()
     await scenario_4()
-=======
     await asyncio.sleep(2)  # Gives the connection pool time to reset safely
     await scenario_2()
     await asyncio.sleep(2)  # Gives the connection pool time to reset safely
@@ -113,7 +111,6 @@ async def main():
     await asyncio.sleep(2)  # Gives the connection pool time to reset safely
     await scenario_4()
     await asyncio.sleep(2)  # Gives the connection pool time to reset safely
->>>>>>> origin/main
     await scenario_5()
     print(f"\n{BOLD}{GREEN}ALL SCENARIOS PROCESSED.{ENDC}")
 
