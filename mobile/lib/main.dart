@@ -68,9 +68,7 @@ class _MainNavigationState extends State<MainNavigation> {
       extendBody: true, 
       backgroundColor: AppTheme.background,
       
-      // GLOBAL SOS BUTTON
-      floatingActionButton: _buildSOSButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // SOS BUTTON COMPLETELY REMOVED FROM HERE
       
       body: _screens[_selectedIndex],
       
@@ -82,37 +80,6 @@ class _MainNavigationState extends State<MainNavigation> {
   // ─────────────────────────────────────────────────────────────
   //  WIDGET BUILDERS
   // ─────────────────────────────────────────────────────────────
-
-  Widget _buildSOSButton() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 90), 
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.sosRed.withOpacity(0.6),
-            blurRadius: 25,
-            spreadRadius: 5,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(35),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: FloatingActionButton(
-            onPressed: () {
-              // SOS Action Here
-            },
-            backgroundColor: AppTheme.sosRed.withOpacity(0.8),
-            elevation: 0,
-            child: const Text('SOS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildFuturisticBottomNav() {
     return Container(
