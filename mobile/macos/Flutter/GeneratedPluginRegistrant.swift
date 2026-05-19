@@ -7,10 +7,7 @@ import Foundation
 
 import app_links
 import geolocator_apple
-<<<<<<< HEAD
 import path_provider_foundation
-=======
->>>>>>> origin/main
 import shared_preferences_foundation
 import sqflite_darwin
 import url_launcher_macos
@@ -18,10 +15,7 @@ import url_launcher_macos
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AppLinksMacosPlugin.register(with: registry.registrar(forPlugin: "AppLinksMacosPlugin"))
   GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))
-<<<<<<< HEAD
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
-=======
->>>>>>> origin/main
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
   SqflitePlugin.register(with: registry.registrar(forPlugin: "SqflitePlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))

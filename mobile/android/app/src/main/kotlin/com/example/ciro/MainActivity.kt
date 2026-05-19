@@ -1,4 +1,4 @@
-package com.ciro.ciro
+package com.example.ciro
 
 import io.flutter.embedding.android.FlutterActivity
 
