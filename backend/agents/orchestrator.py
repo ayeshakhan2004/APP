@@ -1,10 +1,7 @@
 """CIRO Orchestrator — Main pipeline that chains all agents via Antigravity."""
-<<<<<<< HEAD
 
-=======
 import uuid
 import asyncio
->>>>>>> origin/main
 from typing import Any, Dict, List
 from agents.signal_fusion.agent import SignalFusionAgent
 from agents.crisis_detector.agent import CrisisDetectorAgent
@@ -21,10 +18,7 @@ class CIROOrchestrator:
     """
     Main orchestrator — this is what Antigravity coordinates.
     Pipeline: Ingest → Fuse → Detect → Predict → Allocate → Simulate → Notify
-<<<<<<< HEAD
     Recovery runs on-demand when verification data arrives.
-=======
->>>>>>> origin/main
     """
 
     def __init__(self):
@@ -39,15 +33,12 @@ class CIROOrchestrator:
     async def run_pipeline(self, raw_signals: List[Dict[str, Any]], available_resources: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Execute the full crisis response pipeline."""
         try:
-<<<<<<< HEAD
             db_signals = supabase.table('signals').select("*").order("created_at", desc=True).limit(5).execute()
             if hasattr(db_signals, "data") and db_signals.data:
                 # Merge DB signals with Swagger signals
-=======
             print("🔍 Fetching live signals from Supabase...")
             db_signals = supabase.table('signals').select("*").order("created_at", desc=True).limit(5).execute()
             if hasattr(db_signals, "data") and db_signals.data:
->>>>>>> origin/main
                 raw_signals.extend(db_signals.data)
         except Exception as e:
             print(f"❌ DB ERROR: Failed to fetch signals from Supabase: {e}")
@@ -57,7 +48,6 @@ class CIROOrchestrator:
             len(raw_signals), len(available_resources)
         ), {"phase": "pipeline_start"})
 
-<<<<<<< HEAD
 # Step 1: Signal Fusion
         fused = await self.signal_fusion.run({"signals": raw_signals})
         print("\n🚨🚨🚨 RAW FUSED OUTPUT:", type(fused), fused, "\n")
@@ -75,7 +65,7 @@ class CIROOrchestrator:
                 crisis_type = crisis.get("type", "flood")
                 if crisis_type not in ('flood','heatwave','accident','infrastructure','power_outage','protest','disease'):
                     crisis_type = 'infrastructure'  # Default fallback if LLM invents a type
-=======
+
         # Step 1: Signal Fusion
         print("\n🧠 AI Step 1: Fusing Signals...")
         fused = await self.signal_fusion.run({"signals": raw_signals})
@@ -102,17 +92,14 @@ class CIROOrchestrator:
                 crisis_type = crisis.get("type", "flood")
                 if crisis_type not in ('flood','heatwave','accident','infrastructure','power_outage','protest','disease'):
                     crisis_type = 'infrastructure'
->>>>>>> origin/main
                 
                 severity = crisis.get("severity", "moderate")
                 if severity not in ('critical','high','moderate','low'):
                     severity = 'moderate'
 
                 crisis_payload = {
-<<<<<<< HEAD
-=======
+
                     "id": real_db_uuid,  # <-- Forcing the perfect UUID as the Primary Key
->>>>>>> origin/main
                     "type": crisis_type,
                     "location": crisis.get("location", {"lat": 24.8607, "lng": 67.0011, "area_name": "Karachi"}),
                     "severity": severity,
@@ -123,7 +110,6 @@ class CIROOrchestrator:
                 print(f"✅ DB SUCCESS: Inserted crisis {crisis_payload['type']}")
             except Exception as e:
                 print(f"❌ DB ERROR: Crisis insert failed: {e}")
-<<<<<<< HEAD
                 trace_logger.log_reasoning("orchestrator", f"Supabase crisis insert failed: {e}", {"phase": "supabase_error"})
 
         # Step 3: Severity Prediction
@@ -156,7 +142,6 @@ class CIROOrchestrator:
         simulated = await self.action_simulator.run({"allocations": allocations_list})
 
         # Step 6: Stakeholder Notification
-=======
 
         # Step 3: Severity Prediction
         print("\n🧠 AI Step 3: Predicting Severity...")
@@ -235,18 +220,15 @@ class CIROOrchestrator:
 
         # Step 6: Stakeholder Notification
         print("\n🧠 AI Step 6: Generating Notifications...")
->>>>>>> origin/main
         notifications = {}
         for crisis in crises_list:
             notif = await self.stakeholder_notifier.run({
                 "crisis": crisis,
                 "simulation": simulated,
             })
-<<<<<<< HEAD
             # Handle potential missing ID gracefully
             crisis_id = crisis.get("id") or crisis.get("cluster_id") or "unknown"
             notifications[crisis_id] = notif
-=======
             ai_crisis_id = crisis.get("id") or crisis.get("cluster_id") or "unknown"
             notifications[ai_crisis_id] = notif
             
@@ -269,7 +251,6 @@ class CIROOrchestrator:
                 print("✅ DB SUCCESS: Saved public notification!")
             except Exception as e:
                 print(f"❌ DB ERROR: Notification insert failed: {e}")
->>>>>>> origin/main
 
         trace_logger.log_reasoning("orchestrator", "Pipeline complete", {"phase": "pipeline_end"})
 
@@ -277,23 +258,18 @@ class CIROOrchestrator:
             "fused_signals": fused,
             "crises_detected": detected,
             "predictions": predicted,
-<<<<<<< HEAD
             "allocations": allocated,
-=======
             "allocations": allocations_list,
->>>>>>> origin/main
             "simulations": simulated,
             "notifications": notifications,
         }
 
-<<<<<<< HEAD
     async def run_recovery(self, crisis_id: str, verification_data: Dict[str, Any]) -> Dict[str, Any]:
         """Run recovery flow for false alarm or reclassification."""
         return await self.recovery.run({
             "crisis_id": crisis_id,
             "verification_data": verification_data,
         })
-=======
     async def _allocate_with_retry(
         self,
         predictions: list,
