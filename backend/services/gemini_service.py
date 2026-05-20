@@ -29,7 +29,7 @@ async def ask_gemini(prompt: str, system_instruction: str = "") -> dict:
     try:
         # 3. VERTEX MODE: Call generate_content from the credit-backed client
         response = client.models.generate_content(
-            model='gemini-1.5-flash',  # Vertex matches standard production naming
+            model='gemini-2.5-flash',  # Vertex matches standard production naming
             contents=full_prompt
         )
         
