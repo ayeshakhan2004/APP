@@ -6,6 +6,7 @@ import 'screens/map_screen.dart';
 import 'screens/resource_list_screen.dart';
 import 'screens/alert_feed_screen.dart';
 import 'package:flutter/foundation.dart'; // 1. YEH NAYA IMPORT LAZMI HAI (kIsWeb ke liye)
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ─────────────────────────────────────────────────────────────
 //  GLOBAL THEME COLORS
@@ -25,7 +26,7 @@ void main() async {
     await FlutterConfig.loadEnvVariables(); 
   }
   
-  runApp(const CIROApp());
+  runApp(const ProviderScope(child: CIROApp()));
 }
 
 class CIROApp extends StatelessWidget {

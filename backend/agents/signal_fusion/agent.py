@@ -55,12 +55,7 @@ Return JSON:
       "reason": "why flagged"
     }}
   ],
-  "summary": "brief overall assessment"
-}}"""
-
-        system = "You are an expert crisis intelligence analyst specializing in multi-source signal fusion and credibility assessment."
-        
-        result = await ask_gemini(prompt, system)
+}}
 
 CRITICAL: You MUST process the signals above. Do NOT return empty arrays. If coordinates are missing, set "lat": 24.8607, "lng": 67.0011.
 
@@ -116,11 +111,7 @@ Return EXACTLY this JSON structure:
         self.logger.log_reasoning(
             self.name,
             f"Fused {len(signals)} signals into clusters",
-            {"clusters": len(result.get("clusters", [])), "contradictions_found": sum(len(c.get("contradictions", [])) for c in result.get("clusters", []))}
-        )
-
-        return {"fused_signals": result.get("clusters", []), "flagged": result.get("flagged_signals", []), "summary": result.get("summary", "")}
-            {"clusters": len(clusters), "contradictions_found": 0}
+            {"clusters": len(clusters), "contradictions_found": sum(len(c.get("contradictions", [])) for c in clusters) if isinstance(clusters, list) else 0}
         )
 
         return {"fused_signals": clusters, "flagged": result.get("flagged_signals", []), "summary": result.get("summary", "")}

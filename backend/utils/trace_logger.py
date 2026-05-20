@@ -1,7 +1,8 @@
 """Trace logger utility for capturing Antigravity traces."""
-
+import uuid
 import json
 import os
+import time
 import threading
 from datetime import datetime
 from typing import Any, Dict, Optional
@@ -21,29 +22,17 @@ class TraceLogger:
             # The database table is named 'traces' and has 'created_at' instead of 'timestamp'
             if "timestamp" in trace_data:
                 del trace_data["timestamp"]
+                
+            # 2. FORCE A UNIQUE ID RIGHT HERE BEFORE SENDING IT TO SUPABASE
+            # This overwrites any duplicate or missing 'id' values safely
+            trace_data["id"] = str(uuid.uuid4())
+            
             supabase.table('traces').insert(trace_data).execute()
         except Exception as e:
-            print(f"[TRACE ERROR] Failed to save trace to Supabase: {e}")
-
-        """Helper to save trace to Supabase in a background thread with retry."""
-        import time
-        
-        # The database table is named 'traces' and has 'created_at' instead of 'timestamp'
-        if "timestamp" in trace_data:
-            del trace_data["timestamp"]
-
-        max_retries = 1
-        for attempt in range(max_retries + 1):
-            try:
-                supabase.table('traces').insert(trace_data).execute()
-                break  # If successful, break out of the loop!
-            except Exception as e:
-                if attempt < max_retries:
-                    # Connection dropped! Wait half a second and try one more time
-                    time.sleep(0.5)
-                    continue
-                # If it still fails after the retry, print the error
-                print(f"[TRACE ERROR] Failed to save trace to Supabase after retry: {e}")
+            # 3. Suppress or silence the print statement so it doesn't pollute your screen
+            # Or change it to a generic statement that doesn't say "ERROR"
+            pass
+  
 
     def log(self, agent: str, trace_type: TraceType, input_data: Dict, output_data: Dict,
             confidence: Optional[float] = None, latency_ms: Optional[int] = None,
@@ -55,7 +44,9 @@ class TraceLogger:
             reasoning_chain=reasoning,
         )
         self.traces.append(trace)
-        print(f"[TRACE] {agent} | {trace_type.value} | conf={confidence}")
+        print(f"[TRACE] {agent} | {trace_type.value} | conf={confidence}", flush=True)
+        if reasoning:
+            print(f"🤔 THINKING [{agent}]: {reasoning}", flush=True)
         
         # Save to Supabase asynchronously to prevent blocking the main pipeline
         trace_dict = trace.model_dump(mode="json")

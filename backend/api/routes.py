@@ -4,21 +4,22 @@ from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
 import json
 import os
-
-router = APIRouter()
-
+from pathlib import Path
+import logging
 from supabase import create_client
 from dotenv import load_dotenv
 
-load_dotenv()
-url = os.getenv("SUPABASE_URL")
+logger = logging.getLogger("uvicorn.error")
+
+backend_dir = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=backend_dir / ".env")
+
 
 supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
 supabase = create_client(supabase_url, supabase_key)
 
 router = APIRouter()
-
 
 MOCK_DIR = os.path.join(os.path.dirname(__file__), '..', 'mock_data')
 
@@ -32,16 +33,32 @@ def load_mock(filename: str):
 @router.get("/signals")
 async def get_signals():
     """Get all signals from all sources."""
-    signals = []
-    for fname in ['social_media_signals.json', 'weather_signals.json', 'traffic_signals.json', 'emergency_calls.json', 'iot_sensors.json']:
-        signals.extend(load_mock(fname))
+    try:
+        response = supabase.table('signals').select("*").execute()
+        signals = response.data or []
+        if not signals:
+            signals = []
+            for fname in ['social_media_signals.json', 'weather_signals.json', 'traffic_signals.json', 'emergency_calls.json', 'iot_sensors.json']:
+                signals.extend(load_mock(fname))
+    except Exception as e:
+        logger.error(f"❌ SUPABASE DATABASE ERROR: {str(e)}")
+        signals = []
+        for fname in ['social_media_signals.json', 'weather_signals.json', 'traffic_signals.json', 'emergency_calls.json', 'iot_sensors.json']:
+            signals.extend(load_mock(fname))
     return {"signals": signals, "count": len(signals)}
 
 
 @router.get("/resources")
 async def get_resources():
     """Get all available resources."""
-    resources = load_mock('resources_inventory.json')
+    try:
+        response = supabase.table('resources').select("*").execute()
+        resources = response.data or []
+        if not resources:
+            resources = load_mock('resources_inventory.json')
+    except Exception as e:
+        logger.error(f"❌ SUPABASE DATABASE ERROR: {str(e)}")
+        resources = load_mock('resources_inventory.json')
     return {"resources": resources, "count": len(resources)}
 
 
@@ -50,17 +67,42 @@ async def run_full_pipeline():
     """Run the complete CIRO crisis detection pipeline."""
     from agents.orchestrator import CIROOrchestrator
 
-    # Load all signals
-    signals = []
-    for fname in ['social_media_signals.json', 'weather_signals.json', 'traffic_signals.json', 'emergency_calls.json', 'iot_sensors.json']:
-        signals.extend(load_mock(fname))
-
-    resources = load_mock('resources_inventory.json')
-    # Fetch the real resources you just seeded into Supabase!
-    db_resources = supabase.table('resources').select("*").eq("status", "available").execute()
+    try:
+        logger.info("📡 Fetching live signal records from Supabase...")
+        db_signals = supabase.table('signals').select("*").execute()
         
-    # Use the database resources. If it fails for any reason, fallback to the mock data.
-    resources = db_resources.data if hasattr(db_resources, 'data') and db_resources.data else load_mock('resources_inventory.json')
+        if db_signals.data and len(db_signals.data) > 0:
+            signals = db_signals.data
+            logger.info(f"✅ Successfully loaded {len(signals)} live signals from Supabase!")
+        else:
+            logger.warning("⚠️ Supabase returned an empty signals table. Using mock fallback data.")
+            signals = []
+            for fname in ['social_media_signals.json', 'weather_signals.json', 'traffic_signals.json', 'emergency_calls.json', 'iot_sensors.json']:
+                signals.extend(load_mock(fname))
+    except Exception as db_error:
+        logger.error(f"❌ SUPABASE DATABASE ERROR: {str(db_error)}")
+        logger.warning("🔄 Engaging fallback safety net: Loading local mock signals data.")
+        signals = []
+        for fname in ['social_media_signals.json', 'weather_signals.json', 'traffic_signals.json', 'emergency_calls.json', 'iot_sensors.json']:
+            signals.extend(load_mock(fname))
+
+    # FIXED: Removed the invalid status column filter to match the live schema
+    try:
+        logger.info("📡 Fetching live resource records from Supabase...")
+        db_resources = supabase.table('resources').select("*").execute()
+        
+        if db_resources.data and len(db_resources.data) > 0:
+            resources = db_resources.data
+            logger.info(f"✅ Successfully loaded {len(resources)} live rows from Supabase!")
+        else:
+            logger.warning("⚠️ Supabase returned an empty resources table. Using mock fallback data.")
+            resources = load_mock('resources_inventory.json')
+            
+    except Exception as db_error:
+        # Prints out explicit database connection errors to your running terminal console
+        logger.error(f"❌ SUPABASE DATABASE ERROR: {str(db_error)}")
+        logger.warning("🔄 Engaging fallback safety net: Loading local mock inventory data.")
+        resources = load_mock('resources_inventory.json')
 
     orchestrator = CIROOrchestrator()
     result = await orchestrator.run_pipeline(signals, resources)
@@ -97,12 +139,8 @@ async def get_traces():
 @router.post("/traces/export")
 async def export_traces(data: Dict[str, Any] = {"scenario": "default"}):
     """Export traces to JSON file."""
-    from utils.trace_logger import trace_logger
-    scenario = data.get("scenario", "default")
-    path = trace_logger.export_traces(scenario)
-    return {"exported_to": path, "trace_count": len(trace_logger.traces)}
-    """Export all Supabase traces to a JSON file."""
     try:
+        from utils.trace_logger import trace_logger
         scenario = data.get("scenario", "default")
         response = supabase.table('traces').select("*").execute()
         db_traces = response.data or []

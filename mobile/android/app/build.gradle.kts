@@ -8,7 +8,8 @@ plugins {
 android {
     namespace = "com.example.ciro"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkPath = "C:/Users/sohail/Desktop/android-ndk-r27d"
+    ndkVersion = "27.3.13750724"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

@@ -35,20 +35,20 @@ Consider:
 - Social media alone = needs verification
 - If a "flood" has contradicting evidence of "water main burst", note BOTH possibilities
 
-Return JSON:
+Return EXACTLY this JSON structure:
 {{
   "crises_detected": [
     {{
-      "id": "crisis_001",
+      "id": "use the cluster_id here",
       "type": "flood|heatwave|accident|infrastructure|power_outage|protest|disease",
-      "alternative_type": "null or alternative classification if contradictions exist",
-      "location": {{"lat": float, "lng": float, "area_name": "string", "radius_km": float}},
+      "alternative_type": "none or alternative classification if contradictions exist",
+      "location": {{"lat": 24.8607, "lng": 67.0011, "area_name": "Karachi", "radius_km": 5.0}},
       "severity": "critical|high|moderate|low",
-      "confidence_score": float,
-      "affected_population_estimate": int,
+      "confidence_score": 0.9,
+      "affected_population_estimate": 500,
       "evidence_summary": "what signals support this classification",
-      "contradiction_notes": "any conflicting information",
-      "requires_verification": true/false
+      "contradiction_notes": "any conflicting info",
+      "requires_verification": true
     }}
   ],
   "low_confidence_flags": [
@@ -60,35 +60,23 @@ Return JSON:
   ]
 }}"""
 
-        system = "You are an expert urban crisis classifier for Karachi, Pakistan. You must accurately classify crisis types while flagging uncertainties."
-
-        result = await ask_gemini(prompt, system)
-
-Return EXACTLY this JSON structure:
-{{
-  "crises_detected": [
-    {{
-      "id": "use the cluster_id here",
-      "type": "flood",
-      "alternative_type": "none",
-      "location": {{"lat": 24.8607, "lng": 67.0011, "area_name": "Karachi", "radius_km": 5.0}},
-      "severity": "critical",
-      "confidence_score": 0.9,
-      "affected_population_estimate": 500,
-      "evidence_summary": "what signals support this",
-      "contradiction_notes": "any conflicting info",
-      "requires_verification": true
-    }}
-  ],
-  "low_confidence_flags": []
-}}"""
-
-        system = "You are an expert urban crisis classifier for Karachi, Pakistan. You must accurately classify crisis types while flagging uncertainties. ALWAYS output JSON."
+        system = "You are an expert urban crisis classifier for Karachi, Pakistan. You must accurately classify crisis types while flagging uncertainties. ALWAYS output raw JSON."
 
         try:
             print("📡 Step 2: Sending cluster data to Gemini API...")
-            result = await ask_gemini(prompt, system)
-            print(f"📡 Step 2 RAW RESPONSE FROM GEMINI: {result}")
+            raw_response = await ask_gemini(prompt, system)
+            print(f"📡 Step 2 RAW RESPONSE FROM GEMINI: {raw_response}")
+            
+            if isinstance(raw_response, str):
+                cleaned = raw_response.strip()
+                if cleaned.startswith("```json"):
+                    cleaned = cleaned[7:]
+                if cleaned.endswith("```"):
+                    cleaned = cleaned[:-3]
+                result = json.loads(cleaned.strip())
+            else:
+                result = raw_response
+
         except Exception as api_err:
             print(f"❌❌ Step 2 API FATAL ERROR: Exception details: {api_err}")
             # Failsafe fallback so your demo CANNOT crash even if the internet dies!
@@ -114,11 +102,7 @@ Return EXACTLY this JSON structure:
         self.logger.log_reasoning(
             self.name,
             f"Detected {len(crises)} crises from fused signals",
-            {"crises": [{"type": c.get("type"), "severity": c.get("severity"), "confidence": c.get("confidence_score")} for c in crises]}
-        )
-
-        return {"crises_detected": crises, "low_confidence_flags": result.get("low_confidence_flags", [])}
-            {"crises": [{"type": c.get("type", "unknown"), "severity": c.get("severity", "unknown"), "confidence": c.get("confidence_score", 0.0)} for c in crises]}
+            {"crises": [{"type": c.get("type"), "severity": c.get("severity")} for c in crises]}
         )
 
         return {"crises_detected": crises, "low_confidence_flags": result.get("low_confidence_flags", [])}

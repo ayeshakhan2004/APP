@@ -31,6 +31,7 @@ Your task:
    - Don't allocate ALL resources to one crisis — other crises also need help
    - Keep some resources in reserve for new incidents
 4. If resources are insufficient, explain the trade-offs
+5.CRITICAL: When choosing a resource to allocate, you must use the exact string value found in the 'id' field of the available resources list. Do not use the resource name or type as the resource identifier.
 
 Resource type guidelines:
 - Flood: rescue_team (primary), police_unit (traffic), ambulance, water_tanker

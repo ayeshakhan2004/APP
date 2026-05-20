@@ -13,6 +13,15 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> getCrises() async {
+    final response = await http.get(Uri.parse('$baseUrl/crises'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load crises');
+    }
+  }
+
   Future<Map<String, dynamic>> getResources() async {
     final response = await http.get(Uri.parse('$baseUrl/resources'));
     if (response.statusCode == 200) {
@@ -37,6 +46,24 @@ class ApiService {
       return json.decode(response.body)['traces'];
     } else {
       throw Exception('Failed to load traces');
+    }
+  }
+
+  Future<Map<String, dynamic>> getNotifications() async {
+    final response = await http.get(Uri.parse('$baseUrl/notifications'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load notifications');
+    }
+  }
+
+  Future<Map<String, dynamic>> getAllocations() async {
+    final response = await http.get(Uri.parse('$baseUrl/allocations'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load allocations');
     }
   }
 }

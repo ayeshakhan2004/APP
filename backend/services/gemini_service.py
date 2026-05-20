@@ -20,8 +20,6 @@ async def ask_gemini(prompt: str, system_instruction: str = "") -> dict:
     try:
         # 2. NEW SYNTAX: Call generate_content from the client and pass the model name here
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
-
             model='gemini-3.1-flash-lite',
             contents=full_prompt
         )

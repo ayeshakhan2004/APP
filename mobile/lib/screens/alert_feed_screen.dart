@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/data_providers.dart';
 
 // ─────────────────────────────────────────────────────────────
 //  THEME COLORS (Matched with CIRO Theme)
@@ -67,14 +69,14 @@ class FrostedGlassCard extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────
 //  ALERT FEED SCREEN
 // ─────────────────────────────────────────────────────────────
-class AlertFeedScreen extends StatefulWidget {
+class AlertFeedScreen extends ConsumerStatefulWidget {
   const AlertFeedScreen({super.key});
 
   @override
-  State<AlertFeedScreen> createState() => _AlertFeedScreenState();
+  ConsumerState<AlertFeedScreen> createState() => _AlertFeedScreenState();
 }
 
-class _AlertFeedScreenState extends State<AlertFeedScreen> {
+class _AlertFeedScreenState extends ConsumerState<AlertFeedScreen> {
   String activeFilter = 'All';
 
   @override
@@ -168,36 +170,65 @@ class _AlertFeedScreenState extends State<AlertFeedScreen> {
 
                 // 3. Alerts List
                 Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 120), 
-                    children: [
-                      _buildAlertTile(
-                        title: 'Public Alert: G-10 Flooding',
-                        description: 'Water levels rising rapidly. Immediate action: Avoid main roads and underpasses in Sector G-10.',
-                        timeAgo: '2m ago',
-                        icon: Icons.water_drop_rounded,
-                        accentColor: AppTheme.cyan,
-                        severity: 'Critical',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildAlertTile(
-                        title: 'Hospital Notice: Heatwave Surge',
-                        description: 'PIMS Hospital alerted for 50+ incoming heatstroke cases. Extra beds and IV fluids requested.',
-                        timeAgo: '15m ago',
-                        icon: Icons.medical_services_rounded,
-                        accentColor: AppTheme.sosRed,
-                        severity: 'High',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildAlertTile(
-                        title: 'Roadblock: Shahrah-e-Faisal',
-                        description: 'Traffic diverted due to severe accident. Expected clearance in 2 hours. Use alternative routes.',
-                        timeAgo: '1h ago',
-                        icon: Icons.traffic_rounded,
-                        accentColor: AppTheme.yellow,
-                        severity: 'Warning',
-                      ),
-                    ],
+                  child: ref.watch(notificationsProvider).when(
+                    data: (notifications) {
+                      if (notifications.isEmpty) {
+                        return const Center(child: Text("No stakeholder alerts at this time.", style: TextStyle(color: Colors.white54)));
+                      }
+
+                      return ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
+                        itemCount: notifications.length,
+                        itemBuilder: (context, index) {
+                          final notif = notifications[index];
+                          
+                          // Parse backend data
+                          final message = notif['message'] ?? 'Alert message not provided.';
+                          final channel = notif['channel'] ?? 'General';
+                          final status = notif['status'] ?? 'pending';
+                          
+                          // Default UI bindings
+                          String severityLabel = 'High';
+                          Color accent = AppTheme.cyan;
+                          IconData icon = Icons.notifications_active_rounded;
+                          
+                          if (channel.toString().toLowerCase().contains('medical') || channel.toString().toLowerCase().contains('hospital')) {
+                            severityLabel = 'Critical';
+                            accent = AppTheme.sosRed;
+                            icon = Icons.medical_services_rounded;
+                          } else if (channel.toString().toLowerCase().contains('public')) {
+                            severityLabel = 'Warning';
+                            accent = AppTheme.yellow;
+                            icon = Icons.campaign_rounded;
+                          } else if (status.toString().toLowerCase() == 'sent') {
+                            severityLabel = 'Info';
+                            accent = AppTheme.green;
+                            icon = Icons.check_circle_rounded;
+                          }
+
+                          // Simple filtering
+                          if (activeFilter != 'All' && 
+                              !severityLabel.toLowerCase().contains(activeFilter.toLowerCase()) &&
+                              !channel.toString().toLowerCase().contains(activeFilter.toLowerCase())) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: _buildAlertTile(
+                              title: channel.toString().toUpperCase(),
+                              description: message,
+                              timeAgo: 'Just now', // Could be parsed from created_at
+                              icon: icon,
+                              accentColor: accent,
+                              severity: severityLabel,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    loading: () => const Center(child: CircularProgressIndicator(color: AppTheme.cyan)),
+                    error: (err, stack) => Center(child: Text('Error: $err', style: const TextStyle(color: Colors.red))),
                   ),
                 ),
               ],

@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/data_providers.dart';
 
 // ─────────────────────────────────────────────────────────────
 //  THEME COLORS (Matched with your CIRO Theme)
@@ -77,14 +79,14 @@ class FrostedGlassCard extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────
 //  RESOURCE LIST SCREEN
 // ─────────────────────────────────────────────────────────────
-class ResourceListScreen extends StatefulWidget {
+class ResourceListScreen extends ConsumerStatefulWidget {
   const ResourceListScreen({super.key});
 
   @override
-  State<ResourceListScreen> createState() => _ResourceListScreenState();
+  ConsumerState<ResourceListScreen> createState() => _ResourceListScreenState();
 }
 
-class _ResourceListScreenState extends State<ResourceListScreen> {
+class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
   // Simple state to toggle active filter
   String activeFilter = 'All';
 
@@ -164,51 +166,55 @@ class _ResourceListScreenState extends State<ResourceListScreen> {
                   ),
                 ),
 
-                // Resource List
+                // Resource List (Live Data)
                 Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 120), // Bottom padding for global navbar
-                    children: [
-                      _buildResourceTile(
-                        name: 'Ambulance #1',
-                        status: 'Available',
-                        location: 'Station 4',
-                        icon: Icons.medical_services_rounded,
-                        color: AppTheme.green,
-                        isExpanded: false,
-                      ),
-                      const SizedBox(height: 16),
-                      
-                      // THIS IS THE ACTIVE / EXPANDED TILE
-                      _buildResourceTile(
-                        name: 'Rescue Team Alpha',
-                        status: 'Deployed',
-                        location: 'Sector G-10',
-                        icon: Icons.security_rounded,
-                        color: AppTheme.sosRed,
-                        isExpanded: true, 
-                      ),
-                      const SizedBox(height: 16),
+                  child: ref.watch(resourcesProvider).when(
+                    data: (resources) {
+                      if (resources.isEmpty) {
+                        return const Center(child: Text("No resources found", style: TextStyle(color: Colors.white54)));
+                      }
+                      return ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 120),
+                        itemCount: resources.length,
+                        itemBuilder: (context, index) {
+                          final resource = resources[index];
+                          final name = resource['type'] ?? 'Unknown Resource';
+                          final status = resource['status'] ?? 'Unknown';
+                          final baseName = resource['base_name'] ?? 'Unknown Location';
+                          
+                          // Determine icon based on type
+                          IconData iconData = Icons.local_shipping_rounded;
+                          if (name.toLowerCase().contains('ambulance')) iconData = Icons.medical_services_rounded;
+                          else if (name.toLowerCase().contains('police')) iconData = Icons.local_police_rounded;
+                          else if (name.toLowerCase().contains('water')) iconData = Icons.water_drop_rounded;
+                          else if (name.toLowerCase().contains('rescue')) iconData = Icons.security_rounded;
 
-                      _buildResourceTile(
-                        name: 'Police Unit 04',
-                        status: 'Available',
-                        location: 'Highway Patrol',
-                        icon: Icons.local_police_rounded,
-                        color: AppTheme.green,
-                        isExpanded: false,
-                      ),
-                      const SizedBox(height: 16),
+                          // Determine color based on status
+                          Color color = AppTheme.cyan;
+                          if (status.toLowerCase() == 'available') color = AppTheme.green;
+                          if (status.toLowerCase() == 'deployed') color = AppTheme.sosRed;
+                          
+                          // Filter logic
+                          if (activeFilter != 'All' && !name.toLowerCase().contains(activeFilter.toLowerCase().replaceAll('/rescue', ''))) {
+                            return const SizedBox.shrink();
+                          }
 
-                      _buildResourceTile(
-                        name: 'Water Tanker',
-                        status: 'Deployed',
-                        location: 'Sector G-7',
-                        icon: Icons.water_drop_rounded,
-                        color: AppTheme.sosRed,
-                        isExpanded: false,
-                      ),
-                    ],
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: _buildResourceTile(
+                              name: name.toString().toUpperCase(),
+                              status: status.toString().toUpperCase()[0] + status.toString().substring(1).toLowerCase(),
+                              location: baseName,
+                              icon: iconData,
+                              color: color,
+                              isExpanded: false, // Could add state logic to expand tapped items
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    loading: () => const Center(child: CircularProgressIndicator(color: AppTheme.cyan)),
+                    error: (err, stack) => Center(child: Text('Error: $err', style: const TextStyle(color: Colors.red))),
                   ),
                 ),
               ],
