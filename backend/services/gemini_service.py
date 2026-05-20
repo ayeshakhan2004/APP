@@ -7,8 +7,17 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
-# 1. NEW SYNTAX: Initialize the client instead of using 'configure'
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY", ""))
+# 1. READ FROM ENVIRONMENT: Pull the GCP project ID from your .env file
+# (When running on Cloud Run, GCP sets 'GOOGLE_CLOUD_PROJECT' automatically too!)
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id-fallback")
+
+# 2. UPDATE INITIALIZATION: Tell the new client syntax to use Vertex AI with your project credit balance
+# No API key string is needed here anymore!
+client = genai.Client(
+    vertexai=True,
+    project=PROJECT_ID,
+    location="us-central1"
+)
 
 async def ask_gemini(prompt: str, system_instruction: str = "") -> dict:
     """Send prompt to Gemini and get structured JSON response."""
@@ -18,9 +27,9 @@ async def ask_gemini(prompt: str, system_instruction: str = "") -> dict:
     full_prompt += f"{prompt}\n\nRespond ONLY with valid JSON. No markdown, no code fences."
 
     try:
-        # 2. NEW SYNTAX: Call generate_content from the client and pass the model name here
+        # 3. VERTEX MODE: Call generate_content from the credit-backed client
         response = client.models.generate_content(
-            model='gemini-3.1-flash-lite',
+            model='gemini-1.5-flash',  # Vertex matches standard production naming
             contents=full_prompt
         )
         
