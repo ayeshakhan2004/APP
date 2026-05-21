@@ -1,31 +1,26 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_config/flutter_config.dart'; // 1. Yeh import add kiya hai
+
 import 'screens/dashboard_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/resource_list_screen.dart';
 import 'screens/alert_feed_screen.dart';
-import 'package:flutter/foundation.dart'; // 1. YEH NAYA IMPORT LAZMI HAI (kIsWeb ke liye)
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ─────────────────────────────────────────────────────────────
 //  GLOBAL THEME COLORS
 // ─────────────────────────────────────────────────────────────
+
 class AppTheme {
   static const cyan = Color(0xFF00E5FF);
   static const background = Color(0xFF0F172A);
   static const sosRed = Color(0xFFFF2A5F);
 }
 
-// 2. main() function ko async kar ke config initialize kiya hai
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); 
-  
-  // 2. YEH CONDITION ADD KARNI HAI TAAKE WEB PAR CRASH NA HO
-  if (!kIsWeb) {
-    await FlutterConfig.loadEnvVariables(); 
-  }
-  
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const ProviderScope(child: CIROApp()));
 }
 
@@ -36,7 +31,7 @@ class CIROApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CIRO - Crisis Orchestrator',
-      debugShowCheckedModeBanner: false, 
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         primaryColor: AppTheme.cyan,
         scaffoldBackgroundColor: AppTheme.background,
@@ -66,13 +61,13 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, 
+      extendBody: true,
       backgroundColor: AppTheme.background,
-      
+
       // SOS BUTTON COMPLETELY REMOVED FROM HERE
-      
+
       body: _screens[_selectedIndex],
-      
+
       // FUTURISTIC GLASS NAVBAR
       bottomNavigationBar: _buildFuturisticBottomNav(),
     );
@@ -131,11 +126,9 @@ class _MainNavigationState extends State<MainNavigation> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon, 
-              color: isActive ? AppTheme.cyan : Colors.white.withOpacity(0.5), 
-              size: isActive ? 28 : 24
-            ),
+            Icon(icon,
+                color: isActive ? AppTheme.cyan : Colors.white.withOpacity(0.5),
+                size: isActive ? 28 : 24),
             const SizedBox(height: 6),
             if (isActive)
               Container(
@@ -145,12 +138,17 @@ class _MainNavigationState extends State<MainNavigation> {
                   color: AppTheme.cyan,
                   borderRadius: BorderRadius.circular(2),
                   boxShadow: [
-                    BoxShadow(color: AppTheme.cyan, blurRadius: 10, spreadRadius: 2), 
+                    BoxShadow(
+                        color: AppTheme.cyan, blurRadius: 10, spreadRadius: 2),
                   ],
                 ),
               )
             else
-              Text(label, style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 11, fontWeight: FontWeight.w500)),
+              Text(label,
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500)),
           ],
         ),
       ),
